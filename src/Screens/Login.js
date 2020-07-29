@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDom from "react-dom";
-
 import "../sass/materialize.scss";
 import "../App.css";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import {signInWithGoogle} from '../firebase';
 
 class Login extends React.Component{
 
@@ -82,6 +85,7 @@ class Login extends React.Component{
                 <div class="col s4" />
               </div>
             </form>
+            <div><CustomButton onClick = {signInWithGoogle} isGoogleSignIn>Sign In Google</CustomButton></div>
           </div>
         </div>
       </body>

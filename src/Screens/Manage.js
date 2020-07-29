@@ -1,6 +1,6 @@
 import React from "react";
 import "../sass/materialize.scss";
-import "../base";
+import "../firebase";
 import Typography from "@material-ui/core/Typography";
 
 const url = "https://duggy-music.firebaseio.com";
