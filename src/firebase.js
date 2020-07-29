@@ -4,7 +4,7 @@ import "firebase/firestore";
 
 const app = firebase.initializeApp(
   { // firebaseConfig
-  apiKey: "AIzaSyCDl8njloFIfuqaXkLpSObxH9B9LNSnN_4",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "duggy-music.firebaseapp.com",
   databaseURL: "https://duggy-music.firebaseio.com",
   projectId: "duggy-music",
@@ -17,4 +17,10 @@ const app = firebase.initializeApp(
 
 // firebase.analytics(); ??
 
-export default app;
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({prompt:'select_account'});
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
+
+export default firebase;
