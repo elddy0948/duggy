@@ -1,35 +1,73 @@
 import React from "react";
+import ReactDom from "react-dom";
+
 import "../sass/materialize.scss";
+import "../App.css";
 
 class Login extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      requestID : '',
+      requestPW : ''
+    };
+  }
+
+  handlerID = e => {
+    this.setState({requestID : e.target.value});
+  };
+  handlerPW = e => {
+    this.setState({requestPW : e.target.value});
+  };
+  handler = e => {
+    const login_info = {
+      method : "POST",
+      body : JSON.stringify(this.state),
+      headers : {"Content-Type":"application/json"}
+    };
+    fetch("http://localhost:3000/login", login_info)
+    .then(res => {return res.json();})
+    .then(json => {
+      this.setState({requestID : json.requestID, requestPW : json.requestPW});
+    });
+    console.log(this.state.requestID, this.state.requestPW);
+    alert("로그인 되었습니다.\nID : "+this.state.requestID+"\nPW : "+this.state.requestPW);
+    this.props.history.push('/');
+  }
+
   render(){
     return (
-      <body>
+      <body id = "login_body">
         <div class="container">
-          <div class="row" />
+          <div class="row"/>
           <div class="row">
-            <form class="col s12">
+          <form onSubmit = {this.handler}>
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
-                  <input
-                    placeholder="Email"
-                    id="email"
+                  <input 
+                    placeholder="example@google.com" 
+                    id="email" 
                     type="email"
                     class="validate"
-                  />
+                    value = {this.state.requestID}
+                    onChange = {this.handlerID}
+                    />
                 </div>
                 <div class="col s3" />
               </div>
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
-                  <input
-                    placeholder="Password"
+                  <input 
+                    placeholder="Password" 
                     id="password"
-                    type="password"
+                    type="password" 
                     class="validate"
-                  />
+                    value = {this.state.requestPW}
+                    onChange = {this.handlerPW}
+                    />
                 </div>
                 <div class="col s3" />
               </div>
@@ -38,11 +76,8 @@ class Login extends React.Component{
                 <div class="col s4">
                   <button
                     class="waves-effect waves-light btn-large col s12"
-                    type="submit"
-                    name="action"
-                  >
-                    로그인
-                  </button>
+                    type = "submit"
+                    > 로그인 </button>
                 </div>
                 <div class="col s4" />
               </div>

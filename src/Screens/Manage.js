@@ -14,7 +14,7 @@ class Manage extends React.Component{
   }
   _get(){ // url 의 user.json 경로에 접속을 해서 데이터를 가져오는 형태
     fetch(`${url}/user.json`).then(res => {
-      if(res.status != 200){ // 접속을 했을 때 상태 코드가 200이 아니라면 firebase 서버에 문제가 발생
+      if(res.status !== 200){ // 접속을 했을 때 상태 코드가 200이 아니라면 firebase 서버에 문제가 발생
         throw new Error(res.statusText); // 오류 출력
       }
       return res.json(); // 결과를 json 형태로 출력
@@ -30,9 +30,9 @@ class Manage extends React.Component{
     return (
       <body>
           <h1>here Managing Page</h1>
-          {Object.keys(this.state.user).map(id => {
-            const user = this.state.user[id];
-            console.log(user+"??");
+          {Object.keys(this.state.user).map(idx => {
+            const user = this.state.user[idx];
+            console.log(user);
             return (
               <div>
                 <div>firebase에서 읽은 데이터</div>
