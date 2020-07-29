@@ -46,6 +46,7 @@ class Login extends React.Component{
           <div class="row"/>
           <div class="row">
           <form onSubmit = {this.handler}>
+              
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
@@ -60,6 +61,7 @@ class Login extends React.Component{
                 </div>
                 <div class="col s3" />
               </div>
+              
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
@@ -74,6 +76,7 @@ class Login extends React.Component{
                 </div>
                 <div class="col s3" />
               </div>
+              
               <div class="row">
                 <div class="col s4" />
                 <div class="col s4">
@@ -84,8 +87,17 @@ class Login extends React.Component{
                 </div>
                 <div class="col s4" />
               </div>
+
             </form>
-            <div><CustomButton onClick = {signInWithGoogle} isGoogleSignIn>Sign In Google</CustomButton></div>
+            <div class="row">
+                <div class="col s4"/>
+                <div class="col s4">
+                <button id = "googleLoingBtn"
+                    class="waves-effect waves-light btn-large col s12"
+                    onClick = {signInWithGoogle} isGoogleSignIn> sign In Google </button>
+                </div>
+                <div class="col s4"/>
+              </div>
           </div>
         </div>
       </body>
