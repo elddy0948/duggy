@@ -41,6 +41,34 @@
   padding-top:10%;
 }
 
+#SignUpBody{
+  padding-top:3%;
+}
+
+#SignUpTitle, #SignUpTitle2{
+  text-align : center;
+}
+
+#SignUpTitle{
+  color:gray;
+  font-size:100%;
+  padding-bottom:0px;
+  margin-top:3%;
+  margin-bottom:0;
+}
+
+#SignUpTitle2{
+  margin-top:0%;
+}
+
+#SignUpinput{
+  margin:0;
+}
+
+#SignUpBtn{
+  margin-top:5%;
+}
+
 #googleLoginBtn{
   padding-top:10px;
 }

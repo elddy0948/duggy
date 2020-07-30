@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Album, Login, Signup, Store, Home, Manage, Login_check } from "./Screens";
+import { Album, Login, Signup, Store, Home, Manage } from "./Screens";
 
 import "./sass/materialize.scss";
 
@@ -42,7 +42,6 @@ class App extends React.Component{
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/manage" component={Manage} />
-      <Route path="/Login_check" component={Login_check} />
     </Router>
     )
   };
