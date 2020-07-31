@@ -12,8 +12,8 @@ class Manage extends React.Component{
       user : {} // user 라는 데이터가 있다고 가정
     }
   }
-  _get(){ // url 의 user.json 경로에 접속을 해서 데이터를 가져오는 형태
-    fetch(`${url}/user.json`).then(res => {
+  _get(){ // url 의 .json 경로에 접속을 해서 데이터를 가져오는 형태
+    fetch(`${url}/.json`).then(res => {
       if(res.status !== 200){ // 접속을 했을 때 상태 코드가 200이 아니라면 firebase 서버에 문제가 발생
         throw new Error(res.statusText); // 오류 출력
       }
@@ -32,13 +32,14 @@ class Manage extends React.Component{
           <h1>here Managing Page</h1>
           {Object.keys(this.state.user).map(idx => {
             const user = this.state.user[idx];
-            console.log(user);
+            const useridx = idx;
+            console.log(user); // check console
             return (
               <div>
-                <div>firebase에서 읽은 데이터</div>
-                <div>id : {user.id}</div>
-                <div>권한 : {user.author}</div>
-                manage page 에 접속시, 현재 로그인된 ID 에 대한 session을 확인하여 작업을 진행
+                <div>{useridx}번째 user!</div>
+                <div>userName : {user.userName}</div>
+                <div>userID : {user.userID}</div>
+                <p></p>
               </div>
             );
           })}

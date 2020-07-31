@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDom from "react-dom";
+
 import "../sass/materialize.scss";
 import "../App.css";
+
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
@@ -46,7 +48,7 @@ class Login extends React.Component{
           <div class="row"/>
           <div class="row">
           <form onSubmit = {this.handler}>
-              
+              <h4 id = "signinTitle">Sign In</h4>
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
@@ -83,7 +85,7 @@ class Login extends React.Component{
                   <button
                     class="waves-effect waves-light btn-large col s12"
                     type = "submit"
-                    > 로그인 </button>
+                    > Sign In </button>
                 </div>
                 <div class="col s4" />
               </div>
