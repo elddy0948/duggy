@@ -38,7 +38,7 @@ class Login extends React.Component{
     alert("로그인 되었습니다.\nID : "+this.state.requestID+"\nPW : "+this.state.requestPW);
     this.props.history.push('/');
   }
-
+  
   render(){
     return (
       <body id = "login_body">
