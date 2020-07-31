@@ -85,7 +85,6 @@ class Signup extends React.Component{
     // [START createwithemail]
     // 이 함수는 비동기 함수이기 때문에 내부적으로 아이디가 만들어진건지 아닌지 콜백 후의 결과에 따라 처리
 
-
     firebase.auth().createUserWithEmailAndPassword(userID, userPW)
     .then(function() {
       alert("Thank you Create your account.\nPlease SignIn!");
