@@ -1,6 +1,8 @@
 import * as firebase from "firebase/app"; // Firebase SDK
 import "firebase/auth"; // Add the firebase products that you want to use
 import "firebase/firestore";
+import "firebase/app";
+import "firebase/database";
 
 const app = firebase.initializeApp(
   { // firebaseConfig

@@ -38,7 +38,7 @@
 }
 
 #login_body{
-  padding-top:10%;
+  padding-top:3%;
 }
 
 #SignUpBody{
@@ -71,4 +71,10 @@
 
 #googleLoginBtn{
   padding-top:10px;
+}
+
+#signinTitle{
+  text-align:center;
+  color:gray;
+  padding-bottom:5%;
 }
