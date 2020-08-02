@@ -16,13 +16,40 @@ class Login extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+      checking : false
+    };
   }
 
-  signin(email, password){
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+  handler = e => {
+    this.setState({checking:false});
+    var check_login;
+    console.log("currentUser 호출전 check_login 값 : "+check_login);
+    check_login = function(){
+      return firebase.auth().currentUser; 
+    }
+    console.log("currentUser 호출후 check_login 값 : "+check_login);
+    if (check_login === true) {
+      alert("이미 로그인되있음");
+      firebase.auth().signOut();
+    }
+    else {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      alert("login...\n"+email+'\n'+password);
+      if (email.length < 4) {
+        alert('Please enter an email address.');
+        return;
+      }
+      if (password.length < 4) {
+        alert('Please enter a password.');
+        return;
+      }
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
       .catch(function(error) {
         // Handle Errors here.
+        this.setState({checking:true});
         var errorCode = error.code;
         var errorMessage = error.message;
         // [START_EXCLUDE]
@@ -35,61 +62,22 @@ class Login extends React.Component{
         // document.getElementById('quickstart-sign-in').disabled = false;
         // [END_EXCLUDE]
       });
-  }
 
-  handler = e => {
-    if (firebase.auth().currentUser) {
-      alert("이미 로그인되있음");
-      firebase.auth().signOut();
-    } 
-    else {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
-      // alert("login...\n"+email+'\n'+password);
-      if (email.length < 4) {
-        alert('Please enter an email address.');
-        return;
-      }
-      if (password.length < 4) {
-        alert('Please enter a password.');
-        return;
-      }
-      alert("실행전");
-      const result = this.signin(email, password);      
-      alert(result[0]);
     }
     // document.getElementById('quickstart-sign-in').disabled = true;
   }
 
-  // constructor(props){
-  //   super(props);
-  //   this.state = {
-  //     requestID : '',
-  //     requestPW : ''
-  //   };
-  // }
-
-  // handlerID = e => {
-  //   this.setState({requestID : e.target.value});
-  // };
-  // handlerPW = e => {
-  //   this.setState({requestPW : e.target.value});
-  // };
-  // handler = e => {
-  //   const login_info = {
-  //     method : "POST",
-  //     body : JSON.stringify(this.state),
-  //     headers : {"Content-Type":"application/json"}
-  //   };
-  //   fetch("http://localhost:3000/login", login_info)
-  //   .then(res => {return res.json();})
-  //   .then(json => {
-  //     this.setState({requestID : json.requestID, requestPW : json.requestPW});
-  //   });
-  //   console.log(this.state.requestID, this.state.requestPW);
-  //   alert("로그인 되었습니다.\nID : "+this.state.requestID+"\nPW : "+this.state.requestPW);
-  //   this.props.history.push('/');
-  // }
+  hander_google = e => {
+    signInWithGoogle()
+    .then(()=>{
+      this.props.history.push("/");
+    })
+    .catch(error => {
+      // 배포할 때 수정
+      alert(error);
+      return;
+    });
+  }
 
   render(){
     return (
@@ -146,7 +134,7 @@ class Login extends React.Component{
                 <div class="col s4">
                 <button id = "googleLoingBtn"
                     class="waves-effect waves-light btn-large col s12"
-                    onClick = {signInWithGoogle} isGoogleSignIn> sign In Google </button>
+                    onClick = {this.hander_google} > sign In Google </button>
                 </div>
                 <div class="col s4"/>
               </div>
