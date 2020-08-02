@@ -103,17 +103,18 @@ class App extends React.Component{
             </li>
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li>
               {
                 this.state.currentUser ?
-                <a onClick = {this.handler_signOut}>Sign Out</a>
+                  <li>
+                  <li><a href = "">{this.state.currentUser.displayName}</a></li>
+                  <li><a onClick = {this.handler_signOut}>Sign Out</a></li>
+                  </li>
                 :
-                <Link to = "/login">LOGIN</Link>
+                <li>
+                  <li><Link to = "/login">LOGIN</Link></li>
+                  <li><Link to="/signup">SIGNUP</Link></li>
+                </li>
               }
-            </li>
-            <li>
-              <Link to="/signup">SIGNUP</Link>
-            </li>
           </ul>
         </div>
       </nav>
