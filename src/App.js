@@ -11,7 +11,6 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import {auth} from './firebase';
-import LoginCheck from './Screens/LoginCheck';
 
 class App extends React.Component{
 
@@ -50,11 +49,11 @@ class App extends React.Component{
     this.unsubscribeFromAuth();
   }
 
-  handler = e => {
-    console.log(this.state.currentUser);
-  }
-  handler2 = e => {
-    console.log(this.unsubscribeFromAuth);
+  handler_signOut = () => {
+    auth.signOut().then(()=>{
+      alert("success SignOUT!");
+      window.location.reload();
+    });
   }
 
   /* Dont touch
@@ -107,7 +106,7 @@ class App extends React.Component{
             <li>
               {
                 this.state.currentUser ?
-                <a onClick = {() => auth.signOut()}>Sign Out</a>
+                <a onClick = {this.handler_signOut}>Sign Out</a>
                 :
                 <Link to = "/login">LOGIN</Link>
               }
@@ -118,8 +117,6 @@ class App extends React.Component{
           </ul>
         </div>
       </nav>
-      <button onClick = {this.handler} >현재 currentUser의 값은?</button>
-      <button onClick = {this.handler2} >현재 unsubscribeFromAuth의 값은?</button>
       <Route exact path="/" component={Home} />
       <Route path="/album" component={Album} />
       <Route path="/store" component={Store} />
