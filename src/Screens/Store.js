@@ -9,7 +9,7 @@ function Store() {
   var gsRef = fbStorage.refFromURL("gs://duggy-music.appspot.com/Store/2.png");
   var sheetRef = storeRef.child("2.png");
 
-  function fileDown() {
+  const fileDown = () => {
     gsRef
       .getDownloadURL()
       .then(function (url) {
@@ -28,7 +28,7 @@ function Store() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   console.log(sheetRef.fullPath);
 
