@@ -28,6 +28,7 @@ class Signup extends React.Component{
 
     if(userNAME.length < 4){
       alert('Please enter userNAME(nickName) address.');
+      return;
     }
     if (userID.length < 4) {
       alert('Please enter an email address.');
