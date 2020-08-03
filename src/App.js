@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Album, Login, Signup, Store, Home, Manage } from "./Screens";
 
 import "./sass/materialize.scss";
+import 'materialize-css/dist/css/materialize.min.css';
+import M from  'materialize-css/dist/js/materialize.min.js';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -83,6 +85,11 @@ class App extends React.Component{
       // this._get();
   }
   */
+
+ componentDidMount() {
+  let sidenav = document.querySelector('#slide-out');
+  M.Sidenav.init(sidenav, {});
+ }
 
   render(){
     return(

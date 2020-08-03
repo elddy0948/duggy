@@ -1,8 +1,12 @@
 import React from "react";
 import "../sass/materialize.scss";
 import "../firebase";
+import "./Manage.css";
+import "../App.css";
 import Typography from "@material-ui/core/Typography";
-
+import jQuery from "jquery";
+import $ from 'jquery';
+window.$ = window.jQuery = jQuery;
 const url = "https://duggy-music.firebaseio.com";
 
 class Manage extends React.Component{
@@ -25,10 +29,41 @@ class Manage extends React.Component{
   // }
   componentDidMount(){ // 컴포넌트가 구성된 다음, 자동으로 수행되도록 react 컴포넌트가 기본적으로 제공하는 함수
     this._get(); // componentDidMount => 즉 컴포넌트가 실행되면 자동으로 내부 작업이 이루어지도록 함
+
+    $(document).ready(function($){
+      $(".button-collapse").sidenav({
+        menuWidth: 275
+      });
+      $('.collapsible').collapsible();
+    });
+    
   }
+
+
   render(){
     return (
-      <body>
+      <body class ="wrapping">
+        {/* <nav>
+          <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
+            <i class = " material-icons">menu</i></a>            
+        </nav> */}
+        
+          <ul id ="slide-out" class="sidenav sidenav-fixed">
+            <ul class="collapsible collapsible-accordion">
+            
+              <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+                <div class ="collapsible-body">
+                  <ul>
+                    <li><a href="ALBUM">1번 앨범</a></li>
+                    <li><a href="ALBUM">2번 앨범</a></li>
+                    <li><a href="ALBUM">3번 앨범</a></li>
+                  </ul>
+                </div>
+              </li>
+            
+            </ul>
+          </ul>
+	
           <h1>here Managing Page</h1>
           {Object.keys(this.state.user).map(idx => {
             const user = this.state.user[idx];
