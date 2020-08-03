@@ -14,6 +14,10 @@ import 'firebase/database';
 import 'firebase/firestore';
 import {auth} from './firebase';
 
+import jQuery from "jquery";
+import $ from "jquery";
+window.$ = window.jQuery = jQuery;
+
 class App extends React.Component{
 
   constructor(props){
@@ -89,8 +93,13 @@ class App extends React.Component{
  componentDidMount() {
   let sidenav = document.querySelector('#slide-out');
   M.Sidenav.init(sidenav, {});
+  $(".nav-wrapper #nav-mobile .li2").hover(function(){{
+    $(this).find(".ul2").stop().fadeToggle(300);
+  }});
  }
 
+
+ 
   render(){
     return(
       <Router>
@@ -103,8 +112,12 @@ class App extends React.Component{
             <li>
               <Link to="/">HOME</Link>
             </li>
-            <li>
-              <Link to="/album">ALBUM</Link>
+            <li class = "li2"><a>ALBUM</a>
+              <ul class = "ul2">
+                <li class = "li2"><a href="album-1sheet">1 sheet</a></li>
+                <li class = "li2"><a href="album-2sheet">2 sheet</a></li>
+                <li class = "li2"><a href="album-3sheet">3 sheet</a></li>
+              </ul>
             </li>
             <li>
               <Link to="/store">STORE</Link>

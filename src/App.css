@@ -78,3 +78,16 @@
   color:gray;
   padding-bottom:5%;
 }
+
+/*APP 드롭다운*/
+.nav-wrapper #nav-mobile .li2{
+  display:inline-block;
+  position: relative;
+}
+
+.nav-wrapper #nav-mobile .li2 .ul2{
+  position: absolute;
+  display:none;
+  background-color: #e57373;
+}
+/*여기까지*/
