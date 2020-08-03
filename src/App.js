@@ -56,6 +56,10 @@ class App extends React.Component{
     });
   }
 
+  handlerbtn = () => {
+    console.log(auth.currentUser);
+  }
+
   /* Dont touch
   _get(){
       firebase.auth().onAuthStateChanged(function(user) {
@@ -88,9 +92,10 @@ class App extends React.Component{
       <Router>
       <nav>
         <div class="nav-wrapper">
-          <a href="#" class="brand-logo center">
+          <a href="/" class="brand-logo center">
             Duggy-Music
           </a>
+          <a onClick = {this.handlerbtn}>현재 user 정보는 ?</a>
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li>
               <Link to="/">HOME</Link>
