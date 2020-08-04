@@ -90,13 +90,13 @@ class App extends React.Component{
   }
   */
 
- componentDidMount() {
-  let sidenav = document.querySelector('#slide-out');
-  M.Sidenav.init(sidenav, {});
-  $(".nav-wrapper #nav-mobile .li2").hover(function(){{
-    $(this).find(".ul2").stop().fadeToggle(300);
-  }});
- }
+  componentDidMount() {
+    let sidenav = document.querySelector('#slide-out');
+    M.Sidenav.init(sidenav, {});
+    $(".nav-wrapper #nav-mobile .li2").hover(function(){{
+      $(this).find(".ul2").stop().fadeToggle(300);
+    }});
+  }
 
 
  
@@ -114,9 +114,9 @@ class App extends React.Component{
             </li>
             <li class = "li2"><a>ALBUM</a>
               <ul class = "ul2">
-                <li class = "li2"><a href="album-1sheet">1 sheet</a></li>
-                <li class = "li2"><a href="album-2sheet">2 sheet</a></li>
-                <li class = "li2"><a href="album-3sheet">3 sheet</a></li>
+                <li class = "li2"><a href="/album-1sheet">1 sheet</a></li>
+                <li class = "li2"><a href="/album-2sheet">2 sheet</a></li>
+                <li class = "li2"><a href="/album-3sheet">3 sheet</a></li>
               </ul>
             </li>
             <li>
@@ -140,7 +140,7 @@ class App extends React.Component{
         </div>
       </nav>
       <Route exact path="/" component={Home} />
-      <Route path="/album" component={Album} />
+      <Route path="/album-:url" component={Album} />
       <Route path="/store" component={Store} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
