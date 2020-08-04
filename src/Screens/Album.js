@@ -21,6 +21,7 @@ class Album extends React.Component{
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen>
         </iframe>
+        <h1>hello world</h1>
       </div>
     )
   }
