@@ -19,8 +19,7 @@ const app = firebase.initializeApp({
   measurementId: "G-Y0ZEBD2LY6",
 });
 
-// firebase.analytics(); ??
-
+export const Admin = 'admin@naver.com';
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 export var storage = firebase.storage();

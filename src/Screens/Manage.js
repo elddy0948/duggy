@@ -7,7 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import jQuery from "jquery";
 import $ from 'jquery';
 import {auth} from '../firebase';
-import {Admin} from './Admin';
+import {Admin} from '../firebase';
+// import {Admin} from './Admin';
 window.$ = window.jQuery = jQuery;
 const url = "https://duggy-music.firebaseio.com";
 
@@ -105,7 +106,7 @@ class Manage extends React.Component{
 
 
   render(){
-    if(auth.currentUser && Admin === auth.currentUser.email){
+    if(auth.currentUser && auth.currentUser.email === Admin){
       return (
         <body class ="wrapping">
           {/* <nav>
@@ -146,6 +147,8 @@ class Manage extends React.Component{
     else{
       return (
       <div>
+        {alert(auth)}
+        {alert(Admin)}
         {this.handler_notAdmin()}
       </div>
       );

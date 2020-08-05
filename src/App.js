@@ -13,7 +13,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import {auth} from './firebase';
-import {Admin} from './Screens/Admin';
+import {Admin} from './firebase';
 
 import jQuery from "jquery";
 import $ from "jquery";
