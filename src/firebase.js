@@ -34,3 +34,5 @@ export const signUpWithFirebase = (userID, userPW) =>
 export const signInWithFirebase = (email, password) =>
   auth.signInWithEmailAndPassword(email, password);
 export default firebase;
+
+export const imagePath = "gs://duggy-music.appspot.com/Store/2.png";

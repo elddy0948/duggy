@@ -1,45 +1,74 @@
 import React from "react";
 import firebase from "../firebase";
 import { storage } from "firebase";
+import { imagePath } from "../firebase";
 
 function Store() {
   var fbStorage = storage();
   var storageRef = fbStorage.ref();
   var storeRef = storageRef.child("Store");
-  var gsRef = fbStorage.refFromURL("gs://duggy-music.appspot.com/Store/2.png");
+  var musicRef = storageRef.child("Music");
+  var gsRef = fbStorage.refFromURL(imagePath);
   var sheetRef = storeRef.child("2.png");
 
-  function fileDown() {
-    gsRef
+  const fileDown = () => {
+    musicRef
+      .child("새벽의 끝(The end of Dawn).mp3")
       .getDownloadURL()
       .then(function (url) {
-        var xhr = new XMLHttpRequest();
         console.log(url);
-        console.log("Hello!");
+        var xhr = new XMLHttpRequest();
         xhr.responseType = "blob";
         xhr.onload = function (event) {
           var blob = xhr.response;
+          saveOrOpenBlob(blob, url);
         };
         xhr.open("GET", url);
         xhr.send();
-        var img = document.getElementById("myimg");
-        img.src = url;
       })
       .catch(function (error) {
-        console.log(error);
+        switch (error.code) {
+          case "storage/object-not-found":
+            // File doesn't exist
+            console.log("File doesn't exist");
+            break;
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            console.log("File doesn't exist");
+            break;
+          case "storage/canceled":
+            // User canceled the upload
+            console.log("File doesn't exist");
+            break;
+          case "storage/unknown":
+            // Unknown error occurred, inspect the server response
+            console.log("File doesn't exist");
+            break;
+        }
       });
-  }
+  };
 
-  console.log(sheetRef.fullPath);
+  function saveOrOpenBlob(blob, url) {
+    var fileName = "새벽의 끝(The end of Dawn).mp3";
+    var tempEl = document.createElement("a");
+    document.body.appendChild(tempEl);
+    tempEl.style = "display: none";
+    url = window.URL.createObjectURL(blob);
+    tempEl.href = url;
+    tempEl.download = fileName;
+    tempEl.click();
+    window.URL.revokeObjectURL(url);
+  }
 
   return (
     <>
       <body>
-        <h1>{sheetRef.fullPath}</h1>
         <button
           class="waves-effect waves-light btn-large col s12"
           onClick={fileDown}
-        ></button>
+        >
+          따운로드
+        </button>
       </body>
     </>
   );
