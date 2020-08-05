@@ -4,14 +4,15 @@ import ReactDom from "react-dom";
 import "../sass/materialize.scss";
 import "../App.css";
 
-import firebase from 'firebase/app';
+import firebase, { auth } from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
-
 // firebase auth 를 이용한 login
+
+const url = "https://duggy-music.firebaseio.com";
 
 class Login extends React.Component{
 

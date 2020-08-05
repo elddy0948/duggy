@@ -13,10 +13,13 @@ import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/firestore';
 import {auth} from './firebase';
+import {Admin} from './Screens/Admin';
 
 import jQuery from "jquery";
 import $ from "jquery";
 window.$ = window.jQuery = jQuery;
+
+const url = "https://duggy-music.firebaseio.com";
 
 class App extends React.Component{
 
@@ -41,6 +44,12 @@ class App extends React.Component{
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.setState({currentUser : user});
     })
+
+    let sidenav = document.querySelector('#slide-out');
+    M.Sidenav.init(sidenav, {});
+    $(".nav-wrapper #nav-mobile .li2").hover(function(){{
+      $(this).find(".ul2").stop().fadeToggle(300);
+    }});
   }
 
   /*
@@ -59,19 +68,18 @@ class App extends React.Component{
     auth.signOut().then(()=>{
       alert("success SignOUT!");
       window.location.reload();
+      // this.props.history.push("/");
     });
   }
-
-  componentDidMount() {
-    let sidenav = document.querySelector('#slide-out');
-    M.Sidenav.init(sidenav, {});
-    $(".nav-wrapper #nav-mobile .li2").hover(function(){{
-      $(this).find(".ul2").stop().fadeToggle(300);
-    }});
+  
+  handler_currentUser = () => {
+    console.log(auth.currentUser);
+    console.log(auth.currentUser.email);
+  }
+  handler_fb_admin = () => {
+    console.log(Admin);
   }
 
-
- 
   render(){
     return(
       <Router>
@@ -111,6 +119,8 @@ class App extends React.Component{
           </ul>
         </div>
       </nav>
+      <button onClick = {this.handler_currentUser}>user</button>
+      <button onClick = {this.handler_fb_admin}>fb_admin</button>
       <Route exact path="/" component={Home} />
       <Route path="/album-:url" component={Album} />
       <Route path="/store" component={Store} />
