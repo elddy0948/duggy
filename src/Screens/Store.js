@@ -36,7 +36,6 @@ function Store() {
             // User doesn't have permission to access the object
             console.log("File doesn't exist");
             break;
-
           case "storage/canceled":
             // User canceled the upload
             console.log("File doesn't exist");
