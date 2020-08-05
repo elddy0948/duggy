@@ -62,41 +62,13 @@ class App extends React.Component{
     });
   }
 
-
-  /* Dont touch
-  _get(){
-      firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            // User is signed in.
-            //var email = user.email;
-              this.state({email:user.email, signing : true});
-          }
-          else {
-              this.state({email:'', signing : false});
-          }
-      });
+  componentDidMount() {
+    let sidenav = document.querySelector('#slide-out');
+    M.Sidenav.init(sidenav, {});
+    $(".nav-wrapper #nav-mobile .li2").hover(function(){{
+      $(this).find(".ul2").stop().fadeToggle(300);
+    }});
   }
-  shouldComponentUpdate(nextProbs, nextState){ // false를 반환하면 render()를 호출하지 않는다. default : true !      
-    if(this.state.signing !== nextState.signing){
-        this._get();
-        return true;
-    }
-    else return false;
-    // return nextState.signing !== this.state.signing; // state 의 signing 즉 접속중이 변경되면 재 렌더링이 이루어짐
-  }
-  componentDidMount(){
-      // return async function(){ await this._get();}
-      // this._get();
-  }
-  */
-
- componentDidMount() {
-  let sidenav = document.querySelector('#slide-out');
-  M.Sidenav.init(sidenav, {});
-  $(".nav-wrapper #nav-mobile .li2").hover(function(){{
-    $(this).find(".ul2").stop().fadeToggle(300);
-  }});
- }
 
 
  
@@ -114,9 +86,9 @@ class App extends React.Component{
             </li>
             <li class = "li2"><a>ALBUM</a>
               <ul class = "ul2">
-                <li class = "li2"><a href="album-1sheet">1 sheet</a></li>
-                <li class = "li2"><a href="album-2sheet">2 sheet</a></li>
-                <li class = "li2"><a href="album-3sheet">3 sheet</a></li>
+                <li class = "li2"><a href="/album-1sheet">1 sheet</a></li>
+                <li class = "li2"><a href="/album-2sheet">2 sheet</a></li>
+                <li class = "li2"><a href="/album-3sheet">3 sheet</a></li>
               </ul>
             </li>
             <li>
@@ -140,7 +112,7 @@ class App extends React.Component{
         </div>
       </nav>
       <Route exact path="/" component={Home} />
-      <Route path="/album" component={Album} />
+      <Route path="/album-:url" component={Album} />
       <Route path="/store" component={Store} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
