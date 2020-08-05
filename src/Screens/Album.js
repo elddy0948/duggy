@@ -1,31 +1,29 @@
 import React from "react";
 import "../sass/materialize.scss";
+import firebase from "../firebase";
+import { storage } from "firebase";
 
 class Album extends React.Component{
+
+  constructor(props){
+    super(props);
+  }
+
   render(){
     return (
-      <div class="row">
-        <div class="col s12">
-          <ul class="tabs">
-            <li class="tab col s3">
-              <a class="active" href="#test-swipe-2">
-                Test 1
-              </a>
-            </li>
-            <li class="tab col s3">
-              <a class="active" href="#test-swipe-2">
-                Test 2
-              </a>
-            </li>
-            <li class="tab col s3">
-              <a class="active" href="#test-swipe-2">
-                Test 3
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div>
+        <h1>Duggy - My Story</h1>
+        <iframe 
+        width="560" 
+        height="315" 
+        src="https://www.youtube.com/embed/twGrfBQhfgE" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+        </iframe>
+        <h1>hello world</h1>
       </div>
-    );
+    )
   }
 }
 
