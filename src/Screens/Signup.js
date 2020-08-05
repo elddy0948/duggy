@@ -45,25 +45,23 @@ class Signup extends React.Component{
     signUpWithFirebase(userID, userPW)
     .then(() => {
       
-      // 유저의 displayName 을 업데이트 하기 위해, 
-      // 로그인하여 유저 정보를 가져오고 다시 로그아웃 시킨 후,
-      // 가져온 유저정보를 이용해서 displayName을 업데이트하고 홈화면으로 렌더링
+      // 유저의 displayName 을 업데이트
 
-      var userInfo;
-      alert("계정 정보 수정을 위해 작업을 시작합니다.");
-      signInWithFirebase(userID, userPW)
-      .then(()=>{
-        userInfo = auth.currentUser;
-        userInfo.updateProfile({
-          displayName: userNAME
-        }).then(()=>{
-          auth.signOut()
-          .then(()=>{
-            alert("Thank you Create your account.\nPlease SignIn!");
-            this.props.history.push("/");
-          }).catch(error => alert("signOut error : "+error));
-        }).catch(error => alert("update error : "+error));
-      }).catch(error => alert("signIn error : "+error));
+      var userInfo = auth.currentUser;
+      userInfo.updateProfile({
+        displayName : userNAME
+      }).then(()=>{
+        auth.signOut()
+        .then(()=>{
+          alert("Thank you Create your account.\nPlease SignIn!");
+          this.props.history.push("/");
+        })
+        .catch(error => {
+          alert("signOut error : ", error);
+        })
+      }).catch(error => {
+        alert("updateProfile error : ", error);
+      })
 
     })
     .catch(function(error) {
@@ -73,7 +71,11 @@ class Signup extends React.Component{
     // [START_EXCLUDE]
        if (errorCode == 'auth/weak-password') {
           alert('The password is too weak\nPlease using stronger password.');
-       } else {
+       } 
+       else if(errorMessage === 'The email address is already in use by another account.'){
+         alert(errorMessage);
+       }
+       else {
           // alert(errorMessage);
           alert("Do not create ID, retry Sign Up!");
        }
@@ -82,26 +84,6 @@ class Signup extends React.Component{
     });
 
   }
-
-  // handler = e => {
-  //   const signup_info = {
-  //     method : 'POST',
-  //     body : JSON.stringify(this.state),
-  //     headers : {'Content-Type':'application/json'}
-  //   };
-  //   fetch('http://location:3000/signup', signup_info)
-  //   .then(res => {
-  //     if(res.status !== 200){
-  //       throw new Error;
-  //     }
-  //     return res.json();
-  //   })
-  //   .then(json => {
-  //     this.setState({requestID : json.requestID, requestPW : json.requestPW, requestNAME : json.requestNAME});
-  //   });
-  //   alert("회원가입 되었습니다.\nNAME : "+this.state.requestNAME+"\nID : "+this.state.requestID+"\nPW : "+this.state.requestPW);
-  //   this.props.history.push('/');
-  // }
 
   render(){
     return (
