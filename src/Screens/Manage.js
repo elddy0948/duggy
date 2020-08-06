@@ -14,6 +14,8 @@ const url = "https://duggy-music.firebaseio.com";
 class Manage_score extends React.Component{
 
   render(){
+    alert("Manage_score Mount");
+    
       var lists = [];
       var data = this.props.data;
       var i = 0;
@@ -38,6 +40,7 @@ class Manage_score extends React.Component{
 class Manage_read_album extends React.Component{
 
   render(){
+    alert("Manage_read_album Mount");
 
     var lists = [];
     var data = this.props.data;
@@ -100,51 +103,89 @@ class Manage extends React.Component{
   
 
   render(){
-    var data = this.props.useremail;
+    alert("Manage Mount");
 
-    if(data){
-      return(
-        <body class ="wrapping">
-            {/* <nav>
-              <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
-                <i class = " material-icons">menu</i></a>            
-            </nav> */}
-            
-              <ul id ="slide-out" class="sidenav sidenav-fixed">
-                <ul class="collapsible collapsible-expandable">
-                
-                  <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
-                    <div class ="collapsible-body" >
-                      <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
-                    </div>
-                  </li>
-                
-                </ul>
-              </ul>
-    
-              <h1>here Managing Page</h1>
-              <Manage_score data = {this.state.ALBUM_1}></Manage_score>
-    
-              {Object.keys(this.state.admin_album).map(idx => {
-                const admin_album = this.state.admin_album[idx];
-                const admin_albumidx = idx;
-                console.log(admin_album); // check console
-                return (
-                  <div>
-                    <div>{admin_albumidx}번째!</div>
-                    <p></p>
+    var data2 = this.props.user_data;
+    alert(data2);
+    return(
+      <body class ="wrapping">
+          {/* <nav>
+            <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
+              <i class = " material-icons">menu</i></a>            
+          </nav> */}
+          
+            <ul id ="slide-out" class="sidenav sidenav-fixed">
+              <ul class="collapsible collapsible-expandable">
+              
+                <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+                  <div class ="collapsible-body" >
+                    <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
                   </div>
-                );
-              })}
+                </li>
+              
+              </ul>
+            </ul>
+  
+            <h1>here Managing Page</h1>
+            <Manage_score data = {this.state.ALBUM_1}></Manage_score>
+  
+            {Object.keys(this.state.admin_album).map(idx => {
+              const admin_album = this.state.admin_album[idx];
+              const admin_albumidx = idx;
+              console.log(admin_album); // check console
+              return (
+                <div>
+                  <div>{admin_albumidx}번째!</div>
+                  <p></p>
+                </div>
+              );
+            })}
+  
+        </body>
+    )
+    // if(data){
+    //   return(
+    //     <body class ="wrapping">
+    //         {/* <nav>
+    //           <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
+    //             <i class = " material-icons">menu</i></a>            
+    //         </nav> */}
+            
+    //           <ul id ="slide-out" class="sidenav sidenav-fixed">
+    //             <ul class="collapsible collapsible-expandable">
+                
+    //               <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+    //                 <div class ="collapsible-body" >
+    //                   <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
+    //                 </div>
+    //               </li>
+                
+    //             </ul>
+    //           </ul>
     
-          </body>
-      )
-    }
-    else{
-      return(
-        <div>{window.location.href = "/"}</div>
-      )
-    }
+    //           <h1>here Managing Page</h1>
+    //           <Manage_score data = {this.state.ALBUM_1}></Manage_score>
+    
+    //           {Object.keys(this.state.admin_album).map(idx => {
+    //             const admin_album = this.state.admin_album[idx];
+    //             const admin_albumidx = idx;
+    //             console.log(admin_album); // check console
+    //             return (
+    //               <div>
+    //                 <div>{admin_albumidx}번째!</div>
+    //                 <p></p>
+    //               </div>
+    //             );
+    //           })}
+    
+    //       </body>
+    //   )
+    // }
+    // else{
+    //   return(
+    //     <div>{window.location.href = "/"}</div>
+    //   )
+    // }
   }
 }
 
