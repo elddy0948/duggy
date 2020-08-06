@@ -5,6 +5,8 @@ import "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
+const url = 'https://duggy-music.firebaseio.com/';
+
 const app = firebase.initializeApp({
   // firebaseConfig
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,8 +18,6 @@ const app = firebase.initializeApp({
   appId: "1:654777837974:web:a88ba9565973f0ae08d5b7",
   measurementId: "G-Y0ZEBD2LY6",
 });
-
-// firebase.analytics(); ??
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

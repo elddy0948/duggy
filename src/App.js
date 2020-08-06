@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Album, Login, Signup, Store, Home, Manage } from "./Screens";
+import { Album, Login, Signup, Store, Home, Manage, Admin_Component } from "./Screens";
 
 import "./sass/materialize.scss";
 import 'materialize-css/dist/css/materialize.min.css';
@@ -18,12 +18,15 @@ import jQuery from "jquery";
 import $ from "jquery";
 window.$ = window.jQuery = jQuery;
 
+const url = "https://duggy-music.firebaseio.com";
+
 class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
-        currentUser : null
+        currentUser : null,
+        administrator : null
     }
   }
 
@@ -40,7 +43,24 @@ class App extends React.Component{
   componentDidMount(){
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
       this.setState({currentUser : user});
+      if(user){
+        fetch(`${url}/duggy_music_admin.json`)
+        .then(res => {return res.json()})
+        .then(ress => {
+          this.setState({administrator : ress});
+        })
+      }
+      else{
+        this.setState({administrator : null});
+      }
     })
+
+    let sidenav = document.querySelector('#slide-out');
+    M.Sidenav.init(sidenav, {});
+    $(".nav-wrapper #nav-mobile .li1").hover(function(){{
+      $(this).find(".ul1").stop().fadeToggle(300);
+    }});
+
   }
 
   /*
@@ -57,21 +77,15 @@ class App extends React.Component{
 
   handler_signOut = () => {
     auth.signOut().then(()=>{
-      alert("success SignOUT!");
-      window.location.reload();
+      window.location.href = "/";
     });
   }
 
-  componentDidMount() {
-    let sidenav = document.querySelector('#slide-out');
-    M.Sidenav.init(sidenav, {});
-    $(".nav-wrapper #nav-mobile .li2").hover(function(){{
-      $(this).find(".ul2").stop().fadeToggle(300);
-    }});
+  check = () => {
+    console.log("now currentUser : ", this.state.currentUser);
+    console.log("now email : ", this.state.currentUser.email);
   }
 
-
- 
   render(){
     return(
       <Router>
@@ -84,11 +98,11 @@ class App extends React.Component{
             <li>
               <Link to="/">HOME</Link>
             </li>
-            <li class = "li2"><a>ALBUM</a>
-              <ul class = "ul2">
-                <li class = "li2"><a href="/album-1sheet">1 sheet</a></li>
-                <li class = "li2"><a href="/album-2sheet">2 sheet</a></li>
-                <li class = "li2"><a href="/album-3sheet">3 sheet</a></li>
+            <li class = "li1"><a>ALBUM</a>
+              <ul class = "ul1">
+                <li class = "li1"><a href="/album-1sheet">1 sheet</a></li>
+                <li class = "li1"><a href="/album-2sheet">2 sheet</a></li>
+                <li class = "li1"><a href="/album-3sheet">3 sheet</a></li>
               </ul>
             </li>
             <li>
@@ -96,18 +110,16 @@ class App extends React.Component{
             </li>
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-              {
-                this.state.currentUser ?
-                  <li>
-                  <li><a href = "">{this.state.currentUser.displayName}</a></li>
-                  <li><a onClick = {this.handler_signOut}>Sign Out</a></li>
-                  </li>
-                :
-                <li>
-                  <li><Link to = "/login">LOGIN</Link></li>
-                  <li><Link to="/signup">SIGNUP</Link></li>
-                </li>
-              }
+            <button onClick = {this.check} >userconsole</button>
+            {
+              this.state.currentUser ?
+                <Admin_Component data = {this.state.currentUser.displayName}/>
+              :
+              <li>
+                <li><Link to = "/login">LOGIN</Link></li>
+                <li><Link to="/signup">SIGNUP</Link></li>
+              </li>
+            }
           </ul>
         </div>
       </nav>
@@ -116,7 +128,7 @@ class App extends React.Component{
       <Route path="/store" component={Store} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/manage" component={Manage} />
+      <Route path="/manage" render={()=><Manage user_data = {this.state.currentUser ? this.state.currentUser.email : null} /> } />
     </Router>
     )
   };

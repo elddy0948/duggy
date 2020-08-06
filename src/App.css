@@ -80,6 +80,18 @@
 }
 
 /*APP 드롭다운*/
+
+.nav-wrapper #nav-mobile .li1{
+  display:inline-block;
+  position: relative;
+}
+
+.nav-wrapper #nav-mobile .li1 .ul1{
+  position: absolute;
+  display:none;
+  background-color: #e57373;
+}
+
 .nav-wrapper #nav-mobile .li2{
   display:inline-block;
   position: relative;
