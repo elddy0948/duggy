@@ -7,8 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import jQuery from "jquery";
 import $ from 'jquery';
 import {auth} from '../firebase';
-import {Admin} from '../firebase';
-// import {Admin} from './Admin';
 window.$ = window.jQuery = jQuery;
 const url = "https://duggy-music.firebaseio.com";
 
@@ -99,59 +97,53 @@ class Manage extends React.Component{
     });
     
   }
-
-  handler_notAdmin = () => {
-    this.props.history.push("/");
-  }
-
+  
 
   render(){
-    if(auth.currentUser && auth.currentUser.email === Admin){
-      return (
+    var data = this.props.useremail;
+
+    if(data){
+      return(
         <body class ="wrapping">
-          {/* <nav>
-            <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
-              <i class = " material-icons">menu</i></a>            
-          </nav> */}
-          
-            <ul id ="slide-out" class="sidenav sidenav-fixed">
-              <ul class="collapsible collapsible-expandable">
-              
-                <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
-                  <div class ="collapsible-body" >
-                    <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
-                  </div>
-                </li>
-              
+            {/* <nav>
+              <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
+                <i class = " material-icons">menu</i></a>            
+            </nav> */}
+            
+              <ul id ="slide-out" class="sidenav sidenav-fixed">
+                <ul class="collapsible collapsible-expandable">
+                
+                  <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+                    <div class ="collapsible-body" >
+                      <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
+                    </div>
+                  </li>
+                
+                </ul>
               </ul>
-            </ul>
-  
-            <h1>here Managing Page</h1>
-            <Manage_score data = {this.state.ALBUM_1}></Manage_score>
-  
-            {Object.keys(this.state.admin_album).map(idx => {
-              const admin_album = this.state.admin_album[idx];
-              const admin_albumidx = idx;
-              console.log(admin_album); // check console
-              return (
-                <div>
-                  <div>{admin_albumidx}번째!</div>
-                  <p></p>
-                </div>
-              );
-            })}
-  
-        </body>
-      );
+    
+              <h1>here Managing Page</h1>
+              <Manage_score data = {this.state.ALBUM_1}></Manage_score>
+    
+              {Object.keys(this.state.admin_album).map(idx => {
+                const admin_album = this.state.admin_album[idx];
+                const admin_albumidx = idx;
+                console.log(admin_album); // check console
+                return (
+                  <div>
+                    <div>{admin_albumidx}번째!</div>
+                    <p></p>
+                  </div>
+                );
+              })}
+    
+          </body>
+      )
     }
     else{
-      return (
-      <div>
-        {alert(auth)}
-        {alert(Admin)}
-        {this.handler_notAdmin()}
-      </div>
-      );
+      return(
+        <div>{window.location.href = "/"}</div>
+      )
     }
   }
 }
