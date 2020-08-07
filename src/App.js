@@ -81,10 +81,10 @@ class App extends React.Component{
     });
   }
 
-  check = () => {
-    console.log("now currentUser : ", this.state.currentUser);
-    console.log("now email : ", this.state.currentUser.email);
-  }
+  // check = () => {
+  //   console.log("now currentUser : ", this.state.currentUser);
+  //   console.log("now email : ", this.state.currentUser.email);
+  // }
 
   render(){
     return(
@@ -110,10 +110,9 @@ class App extends React.Component{
             </li>
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <button onClick = {this.check} >userconsole</button>
             {
               this.state.currentUser ?
-                <Admin_Component data = {this.state.currentUser.displayName}/>
+                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
               :
               <li>
                 <li><Link to = "/login">LOGIN</Link></li>
@@ -128,7 +127,10 @@ class App extends React.Component{
       <Route path="/store" component={Store} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-      <Route path="/manage" render={()=><Manage user_data = {this.state.currentUser ? this.state.currentUser.email : null} /> } />
+      <Route path="/manage" 
+        render={() => 
+        this.state.currentUser ? this.state.currentUser.email === this.state.administrator ? <Manage /> 
+        : <Home /> : <Home /> } />
     </Router>
     )
   };

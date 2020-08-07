@@ -5,6 +5,7 @@ import {auth} from '../firebase';
 import "../sass/materialize.scss";
 import {BrowserRouter as Link} from "react-router-dom";
 import {Manage} from "./Manage";
+import '../App.css';
 
 window.$ = window.jQuery = jQuery;
 
@@ -26,10 +27,12 @@ class Admin_Component extends React.Component{
       }
 
     render(){
-        var data = this.props.data;
-        return(
+        var displayname = this.props.displayname;
+        var admin_check = this.props.admintrue;
+        if(admin_check){
+          return(
             <li>
-                  <li class = "li2"><a>{data}</a>
+                  <li class = "li2" ><a>{displayname}</a>
                     <ul class = "ul2">
                       <li class = "li2"><a href="/manage"><i class = "material-icons left">settings</i>Setting</a></li>
                     </ul>
@@ -38,7 +41,16 @@ class Admin_Component extends React.Component{
                     <a onClick = {this.handler_signOut}>Sign Out</a>
                   </li>
             </li>
-        )
+          )
+        }
+        else{
+          return(
+            <li>
+                  <li class = "li2" ><a class = "user-admin-view">{displayname}</a></li>
+                  <li><a onClick = {this.handler_signOut}>Sign Out</a></li>
+            </li>
+          )
+        }
     }
 }
 
