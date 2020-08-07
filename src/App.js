@@ -112,7 +112,7 @@ class App extends React.Component{
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {
               this.state.currentUser ?
-                <Admin_Component data = {this.state.currentUser.displayName}/>
+                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
               :
               <li>
                 <li><Link to = "/login">LOGIN</Link></li>
@@ -128,7 +128,9 @@ class App extends React.Component{
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
       <Route path="/manage" 
-        render={() => this.state.currentUser ? this.state.currentUser.email === this.state.administrator ? <Manage /> : <Route path = "/" component = {Home} /> : <Route path = "/" component = {Home} />} />
+        render={() => 
+        this.state.currentUser ? this.state.currentUser.email === this.state.administrator ? <Manage /> 
+        : <Home /> : <Home /> } />
     </Router>
     )
   };
