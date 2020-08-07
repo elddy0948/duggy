@@ -13,9 +13,7 @@ const url = "https://duggy-music.firebaseio.com";
 
 class Manage_score extends React.Component{
 
-  render(){
-    alert("Manage_score Mount");
-    
+  render(){    
       var lists = [];
       var data = this.props.data;
       var i = 0;
@@ -40,8 +38,6 @@ class Manage_score extends React.Component{
 class Manage_read_album extends React.Component{
 
   render(){
-    alert("Manage_read_album Mount");
-
     var lists = [];
     var data = this.props.data;
     var i = 0;
@@ -103,10 +99,7 @@ class Manage extends React.Component{
   
 
   render(){
-    alert("Manage Mount");
 
-    var data2 = this.props.user_data;
-    alert(data2);
     return(
       <body class ="wrapping">
           {/* <nav>
