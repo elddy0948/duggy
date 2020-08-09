@@ -21,13 +21,13 @@ class Signup extends React.Component{
   }
 
   handler = e => {
-    var userNAME = document.getElementById('userNAME').value;
+    var userEmail = document.getElementById('userEmail').value;
     var userID = document.getElementById('userID').value;
     var userPW = document.getElementById('userPW').value;
     
 
-    if(userNAME.length < 4){
-      alert('Please enter userNAME(nickName) address.');
+    if(userEmail.length < 4){
+      alert('Please enter userEmail(nickName) address.');
       return;
     }
     if (userID.length < 4) {
@@ -49,7 +49,7 @@ class Signup extends React.Component{
 
       var userInfo = auth.currentUser;
       userInfo.updateProfile({
-        displayName : userNAME
+        displayName : userEmail
       }).then(()=>{
         auth.signOut()
         .then(()=>{
@@ -96,12 +96,13 @@ class Signup extends React.Component{
           <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6" id = "SignUpinput">
-                <font color = "gray">UserName</font>&nbsp;<font color = "red">*</font>
+                {/* <font color = "gray">userEmail</font>&nbsp;<font color = "red">*</font> */}
                   <input
-                    placeholder="Write your name"
-                    id="userNAME"
+                    // placeholder="Write your name"
+                    id="userEmail"
                     type="text"
                     class="validate"/>
+                    <label for = "userEmail">UserEmail</label>
                 </div>
                 <div class="col s3" />
               </div>
@@ -109,12 +110,13 @@ class Signup extends React.Component{
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6" id = "SignUpinput">
-                <font color = "gray">UserID</font>&nbsp;<font color = "red">*</font>
+                {/* <font color = "gray">UserID</font>&nbsp;<font color = "red">*</font> */}
                   <input
-                    placeholder="Write Sign Up ID"
+                    // placeholder="Write Sign Up ID"
                     id="userID"
                     type="text"
                     class="validate"/>
+                    <label for = "userID">UserID(NickName)</label>
                 </div>
                 <div class="col s3" />
               </div>
@@ -122,12 +124,13 @@ class Signup extends React.Component{
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6" id = "SignUpinput">
-                <font color = "gray">Password</font>&nbsp;<font color = "red">*</font>
+                {/* <font color = "gray">Password</font>&nbsp;<font color = "red">*</font> */}
                   <input
-                    placeholder="Write password"
+                    // placeholder="Write password"
                     id="userPW"
                     type="password"
                     class="validate"/>
+                    <label for = "userPW">password</label>
                 </div>
                 <div class="col s3" />
               </div>

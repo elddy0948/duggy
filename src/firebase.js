@@ -27,10 +27,10 @@ export var storage = firebase.storage();
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
-export const signUpWithFirebase = (userID, userPW) =>
-  auth.createUserWithEmailAndPassword(userID, userPW);
-export const signInWithFirebase = (email, password) =>
-  auth.signInWithEmailAndPassword(email, password);
+
+export const signUpWithFirebase = (userID, userPW) => auth.createUserWithEmailAndPassword(userID, userPW);
+export const signInWithFirebase = (email, password) => auth.signInWithEmailAndPassword(email, password);
+  
 export default firebase;
 
 export const imagePath = "gs://duggy-music.appspot.com/Store/2.png";
