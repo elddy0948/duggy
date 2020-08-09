@@ -38,29 +38,35 @@ class Login extends React.Component{
         return;
       }
       
-      signInWithFirebase(email, password)
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(()=>{
-        this.props.history.push("/");
+        signInWithFirebase(email, password)
+        .then(()=>{
+          this.props.history.push("/");
+        })
+        .catch(error => {
+          alert(error);
+          return;
+        });
       })
-      .catch(error => {
-        alert(error);
-        return;
-      });
 
     }
     // document.getElementById('quickstart-sign-in').disabled = true;
   }
 
   handler_google = e => {
-    signInWithGoogle()
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(()=>{
-      this.props.history.push("/");
+      signInWithGoogle()
+      .then(()=>{
+        this.props.history.push("/");
+      })
+      .catch(error => {
+        // 배포할 때 수정
+        alert(error);
+        return;
+      });
     })
-    .catch(error => {
-      // 배포할 때 수정
-      alert(error);
-      return;
-    });
   }
   
   render(){
@@ -74,8 +80,9 @@ class Login extends React.Component{
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
+                  <label for = "email">UserEmail</label>
                   <input 
-                    placeholder="example@google.com" 
+                    // placeholder="example@google.com" 
                     id="email" 
                     type="email"
                     class="validate"
@@ -87,8 +94,9 @@ class Login extends React.Component{
               <div class="row">
                 <div class="col s3" />
                 <div class="input-field col s6">
+                  <label for = "password">password</label>
                   <input 
-                    placeholder="Password" 
+                    // placeholder="Password" 
                     id="password"
                     type="password" 
                     class="validate"

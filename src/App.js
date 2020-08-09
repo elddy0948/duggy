@@ -81,10 +81,9 @@ class App extends React.Component{
     });
   }
 
-  // check = () => {
-  //   console.log("now currentUser : ", this.state.currentUser);
-  //   console.log("now email : ", this.state.currentUser.email);
-  // }
+  check = () => {
+    if(this.state.currentUser)console.log(this.state.currentUser);
+  }
 
   render(){
     return(
@@ -108,6 +107,7 @@ class App extends React.Component{
             <li>
               <Link to="/store">STORE</Link>
             </li>
+            <li><button onClick = {this.check}>currentUserInfo</button></li>
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {
