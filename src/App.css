@@ -37,7 +37,7 @@
   }
 }
 
-#login_body{
+#login_body, #password_reset_body{
   padding-top:3%;
 }
 
@@ -45,8 +45,13 @@
   padding-top:3%;
 }
 
-#SignUpTitle, #SignUpTitle2{
+#SignUpTitle, #SignUpTitle2, #password_resetTitle{
   text-align : center;
+}
+
+#password_resetTitle{
+  padding-top:3%;
+  padding-bottom:7%;
 }
 
 #SignUpTitle{
@@ -75,7 +80,6 @@
 
 #signinTitle{
   text-align:center;
-  color:gray;
   padding-bottom:5%;
 }
 
@@ -101,4 +105,23 @@
   position: absolute;
   display:none;
   background-color: #e57373;
+}
+
+#kakaoBtn{
+  padding: 0;
+  width: 190px;
+  height: 44px;
+  line-height: 44px;
+  color: #783c00;
+  background-color: #FFEB00;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+#kakaoBtn:hover{
+  box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.2)
 }

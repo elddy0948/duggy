@@ -10,7 +10,8 @@ import 'firebase/database';
 import 'firebase/firestore';
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
-// firebase auth 를 이용한 login
+
+import kakaoLogin from 'react-kakao-login';
 
 const url = "https://duggy-music.firebaseio.com";
 
@@ -68,6 +69,14 @@ class Login extends React.Component{
       });
     })
   }
+
+  handler_kakao = () => {
+    
+  }
+
+  forget_user_password = () => {
+    this.props.history.push("/password_reset");
+  }
   
   render(){
     return (
@@ -101,6 +110,7 @@ class Login extends React.Component{
                     type="password" 
                     class="validate"
                     />
+                  <a href = "#" onClick = {this.forget_user_password}>forgot password?</a>
                 </div>
                 <div class="col s3" />
               </div>
@@ -118,12 +128,25 @@ class Login extends React.Component{
             <div class="row">
                 <div class="col s4"/>
                 <div class="col s4">
-                <button id = "googleLoingBtn"
+                <button
                     class="waves-effect waves-light btn-large col s12"
                     onClick = {this.handler_google} > sign In Google </button>
                 </div>
                 <div class="col s4"/>
-              </div>
+            </div>
+
+            <div class="row">
+                <div class="col s4"/>
+                <div class="col s4">
+                <button id = "kakaoBtn"
+                    jsKey={process.env.REACT_APP_KAKAO_API_KEY}
+                    buttonText="sign In KaKao"
+                    // class="waves-effect waves-light btn-large col s12"
+                    onClick = {this.handler_kakao} ></button>
+                </div>
+                <div class="col s4"/>
+            </div>
+
           </div>
         </div>
       </body>

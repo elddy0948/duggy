@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Album, Login, Signup, Store, Home, Manage, Admin_Component } from "./Screens";
+import { Album, Login, Signup, Store, Home, Manage, Admin_Component, Password_reset } from "./Screens";
 
 import "./sass/materialize.scss";
 import 'materialize-css/dist/css/materialize.min.css';
@@ -81,9 +81,9 @@ class App extends React.Component{
     });
   }
 
-  check = () => {
-    if(this.state.currentUser)console.log(this.state.currentUser);
-  }
+  // check = () => {
+  //   if(this.state.currentUser)console.log(this.state.currentUser);
+  // }
 
   render(){
     return(
@@ -107,7 +107,6 @@ class App extends React.Component{
             <li>
               <Link to="/store">STORE</Link>
             </li>
-            <li><button onClick = {this.check}>currentUserInfo</button></li>
           </ul>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {
@@ -131,6 +130,7 @@ class App extends React.Component{
         render={() => 
         this.state.currentUser ? this.state.currentUser.email === this.state.administrator ? <Manage /> 
         : <Home /> : <Home /> } />
+      <Route path="/password_reset" component={Password_reset} />
     </Router>
     )
   };
