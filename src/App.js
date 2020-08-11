@@ -81,10 +81,6 @@ class App extends React.Component{
     });
   }
 
-  // check = () => {
-  //   if(this.state.currentUser)console.log(this.state.currentUser);
-  // }
-
   render(){
     return(
       <Router>

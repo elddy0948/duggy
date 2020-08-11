@@ -3,6 +3,7 @@ import ReactDom from "react-dom";
 
 import "../sass/materialize.scss";
 import "../App.css";
+import styled from 'styled-components';
 
 import firebase, { auth } from 'firebase/app';
 import 'firebase/auth';
@@ -11,7 +12,7 @@ import 'firebase/firestore';
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
 
-import kakaoLogin from 'react-kakao-login';
+import KaKaoLogin from 'react-kakao-login';
 
 const url = "https://duggy-music.firebaseio.com";
 
@@ -39,17 +40,26 @@ class Login extends React.Component{
         return;
       }
       
-      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      signInWithFirebase(email, password)
       .then(()=>{
-        signInWithFirebase(email, password)
-        .then(()=>{
-          this.props.history.push("/");
-        })
-        .catch(error => {
-          alert(error);
-          return;
-        });
+        this.props.history.push("/");
       })
+      .catch(error => {
+        alert(error);
+        return;
+      });
+
+      // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      // .then(()=>{
+      //   signInWithFirebase(email, password)
+      //   .then(()=>{
+      //     this.props.history.push("/");
+      //   })
+      //   .catch(error => {
+      //     alert(error);
+      //     return;
+      //   });
+      // })
 
     }
     // document.getElementById('quickstart-sign-in').disabled = true;
@@ -71,7 +81,28 @@ class Login extends React.Component{
   }
 
   handler_kakao = () => {
-    
+    // 작업순서
+    // 1. 사용자로부터 카카오 로그인을 통해 Access Token(String)을 발급받는다
+    // 2. Firebase Custom Token을 만들기 위해서 kakao access token을 서버로 전송한다
+    // 3. 서버에서 kakao API에 access token을 넘겨 사용자의 정보를 받아오는지 확인한다
+    // 4. 사용자의 정보를 성공적으로 받았다면, Firebase Admin SDK 을 이용해서 firebase Auth 에 User을 생성한다
+    // 5. 생성된 User의 UID를 통해 Firebase Custom Token을 생성해서 클라이언트에게 반환한다
+    // 6. Firebase Auth 에서 제공하는 signinWithcustomtoken 메서드의 인자로 Custom Token을 넘겨 로그인을 처리한다
+  }
+
+  responseGoogle = res => {
+    window.location.href="/";
+  }
+
+  responseKaKao = res => {
+    window.location.href="/";
+  }
+
+  responseError = error => {
+    // alert(error.code);
+    // window.location.reload();
+    alert("google : ", process.env.REACT_APP_API_KEY);
+    alert("kakao : ", process.env.REACT_APP_KAKAO_API_KEY);
   }
 
   forget_user_password = () => {
@@ -130,7 +161,7 @@ class Login extends React.Component{
                 <div class="col s4">
                 <button
                     class="waves-effect waves-light btn-large col s12"
-                    onClick = {this.handler_google} > sign In Google </button>
+                    onClick = {this.handler_google} > sign in with Google </button>
                 </div>
                 <div class="col s4"/>
             </div>
@@ -138,11 +169,14 @@ class Login extends React.Component{
             <div class="row">
                 <div class="col s4"/>
                 <div class="col s4">
-                <button id = "kakaoBtn"
+                <KaKaoButton
                     jsKey={process.env.REACT_APP_KAKAO_API_KEY}
-                    buttonText="sign In KaKao"
                     // class="waves-effect waves-light btn-large col s12"
-                    onClick = {this.handler_kakao} ></button>
+                    buttonText = "sign in with KaKao"
+                    onSuccess = {this.responseKaKao}
+                    onFailure = {this.responseError}
+                    />
+                    {/* onClick = {this.handler_kakao} >sign in with KaKao</KaKaoButton> */}
                 </div>
                 <div class="col s4"/>
             </div>
@@ -153,5 +187,23 @@ class Login extends React.Component{
     );
   }
 }
+
+const KaKaoButton = styled(KaKaoLogin)`
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  line-height: 44px;
+  color: #783c00;
+  background-color: #FFEB00;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  $:hover{
+    box-shadow: 0 0px 15px 0 rgba(0,0,0,0.2)
+  }
+`
 
 export default Login;
