@@ -2,6 +2,7 @@ import React from "react";
 import firebase from "../firebase";
 import { storage } from "firebase";
 import { imagePath } from "../firebase";
+import { firestore } from "../firebase";
 
 function Store() {
   var fbStorage = storage();
@@ -10,6 +11,17 @@ function Store() {
   var musicRef = storageRef.child("Music");
   var gsRef = fbStorage.refFromURL(imagePath);
   var sheetRef = storeRef.child("2.png");
+
+  const testFireStore = () => {
+    firestore
+      .collection("1Sheet")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(`${doc.id} => ${doc.get("songName")}`);
+        });
+      });
+  };
 
   const fileDown = () => {
     musicRef
@@ -68,6 +80,12 @@ function Store() {
           onClick={fileDown}
         >
           따운로드
+        </button>
+        <button
+          class="waves-effect waves-light btn-large col s12"
+          onClick={testFireStore}
+        >
+          가져오기
         </button>
       </body>
     </>
