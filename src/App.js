@@ -95,9 +95,9 @@ class App extends React.Component{
             </li>
             <li class = "li1"><a>ALBUM</a>
               <ul class = "ul1">
-                <li class = "li1"><a href="/album-1sheet">1 sheet</a></li>
-                <li class = "li1"><a href="/album-2sheet">2 sheet</a></li>
-                <li class = "li1"><a href="/album-3sheet">3 sheet</a></li>
+                <li class = "li1"><a href="/album-1Sheet">1 sheet</a></li>
+                <li class = "li1"><a href="/album-2Sheet">2 sheet</a></li>
+                <li class = "li1"><a href="/album-3Sheet">3 sheet</a></li>
               </ul>
             </li>
             <li>

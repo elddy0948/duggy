@@ -22,6 +22,8 @@ const app = firebase.initializeApp({
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 export var storage = firebase.storage();
+
+// persistence set session(session, local, none)
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 // google login
