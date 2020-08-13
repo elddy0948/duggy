@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import firebase, { auth } from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import 'firebase/firestore';
+import firestore from '../firebase';
+
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
 

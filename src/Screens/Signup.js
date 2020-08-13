@@ -5,9 +5,11 @@ import "../sass/materialize.scss";
 import '../App.css';
 import '../firebase';
 
-import * as firebase from 'firebase/app';
+// import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import firebase from '../firebase';
+import {firestore} from '../firebase';
 
 import {signInWithFirebase} from '../firebase';
 import {signUpWithFirebase} from '../firebase';
@@ -21,22 +23,22 @@ class Signup extends React.Component{
   }
 
   handler = e => {
-    var userNick = document.getElementById('userNick').value;
+    var userName = document.getElementById('userName').value;
     var userEmail = document.getElementById('userEmail').value;
     var userPW = document.getElementById('userPW').value;
     
 
-    if(userNick.length < 4){
+    if(userName.length < 4){
       alert('Please enter Nickname address.');
-      return;
+      window.location.reload();
     }
     if (userEmail.length < 4) {
       alert('Please enter an email address.');
-      return;
+      window.location.reload();
     }
     if (userPW.length < 4) {
       alert('Please enter a password.');
-      return;
+      window.location.reload();
     }
 
     // Sign in with email and pass.
@@ -45,44 +47,56 @@ class Signup extends React.Component{
     signUpWithFirebase(userEmail, userPW)
     .then(() => {
       
-      // 유저의 displayName 을 업데이트
+      // firestore 에 유저정보 등록하기 collection : Users (Email : userEmail, name : userName, authority(array) : null)
+      var store_data = {
+        Email : userEmail,
+        authority : [],
+        name : userName
+      };
 
-      var userInfo = auth.currentUser;
-      userInfo.updateProfile({
-        displayName : userNick
-      }).then(()=>{
-        auth.signOut()
-        .then(()=>{
-          alert("Thank you Create your account.\nPlease SignIn!");
-          this.props.history.push("/");
+      firestore.collection("Users").doc().set(store_data)
+      .then(()=>{
+        // 유저의 displayName 을 업데이트
+        var userInfo = auth.currentUser;
+        userInfo.updateProfile({
+          displayName : userName
+        }).then(()=>{
+          auth.signOut()
+          .then(()=>{ // clear!
+            alert("Thank you Create your account.\nPlease SignIn!");
+            this.props.history.push("/");
+          })
+          .catch(error => { // this error is signOut error
+            alert("session error : " + error);
+            window.location.reload();
+          })
+        }).catch(error => { // this error is updateProfile error
+          alert("updateProfile error : " + error);
+          window.location.reload();
         })
-        .catch(error => {
-          alert("signOut error : ", error);
-        })
-      }).catch(error => {
-        alert("updateProfile error : ", error);
       })
-
+      .catch(error => { // this error is firestore Add
+        alert("user info not join firestore" + error);
+        window.location.reload();
+      })
     })
-    .catch(function(error) {
-    // Handle Errors here.
+    .catch(error => { // not make auth info
       var errorCode = error.code;
       var errorMessage = error.message;
-    // [START_EXCLUDE]
-       if (errorCode == 'auth/weak-password') {
-          alert('The password is too weak\nPlease using stronger password.');
-       } 
-       else if(errorMessage === 'The email address is already in use by another account.'){
-         alert(errorMessage);
-       }
-       else {
-          // alert(errorMessage);
-          alert("Do not create ID, retry Sign Up!");
-       }
-      //  this.props.history.push("/signin");
-    // [END_EXCLUDE]
+      if (errorCode == 'auth/weak-password') {
+        alert('The password is too weak\nPlease using stronger password.' + error);
+        window.location.reload();
+     } 
+     else if(errorMessage === 'The email address is already in use by another account.' + error){
+        alert(errorMessage);
+        window.location.reload();
+      }
+      else {
+         // alert(errorMessage);
+        alert("Do not create ID, retry Sign Up!" + error);
+        window.location.reload();
+      }
     });
-
   }
 
   render(){
@@ -99,10 +113,10 @@ class Signup extends React.Component{
                 {/* <font color = "gray">userNick</font>&nbsp;<font color = "red">*</font> */}
                   <input
                     // placeholder="Write your name"
-                    id="userNick"
+                    id="userName"
                     type="text"
                     class="validate"/>
-                    <label for = "userNick">userNick</label>
+                    <label for = "userName">userName</label>
                 </div>
                 <div class="col s3" />
               </div>
