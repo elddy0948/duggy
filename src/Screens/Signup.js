@@ -99,7 +99,7 @@ class Signup extends React.Component{
     });
   }
 
-  render(){
+  render(){  
     return (
       <body>
         <h5 id = "SignUpTitle">Join Duggy-Music</h5>

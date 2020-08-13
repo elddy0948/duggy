@@ -49,7 +49,7 @@ class Login extends React.Component{
         alert(error);
         return;
       });
-
+  
       // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
       // .then(()=>{
       //   signInWithFirebase(email, password)
