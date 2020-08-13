@@ -100,7 +100,7 @@ class App extends React.Component{
                 <li class = "li1"><a href="/album-3Sheet">3 sheet</a></li>
               </ul>
             </li>
-            <li>
+            <li> 
               <Link to="/store">STORE</Link>
             </li>
           </ul>
