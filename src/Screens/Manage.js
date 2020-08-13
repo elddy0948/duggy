@@ -43,6 +43,20 @@ class Manage_information extends React.Component{
     };
   }
 
+  _delete(id){
+
+    firestore.collection(this.state.sheet).doc(id).delete().then(function() {
+      console.log("Document successfully deleted!");
+  }).catch(function(error) {
+      console.error("Error removing document: ", error);
+  });
+
+  }
+
+  handleDelete = (id) => {
+    this._delete(id);
+  }
+
   componentDidMount(){
 
     firestore.collection(this.state.sheet).get().then(res => {
@@ -60,8 +74,8 @@ class Manage_information extends React.Component{
         doclist.push(songname);
         doclist2.push(real_songurl);
         list.push(
-        <tr id = "songName" onClick = {() => this.page_change(songname, real_songurl)}>
-        {songname}</tr>)
+        <tr id = "songName"><Grid item xs={8}>
+        {songname}<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></tr>)
       })
       this.setState({songNameList:list});
       this.setState({songName:doclist[0], songUrl : doclist2[0]});
@@ -73,12 +87,13 @@ class Manage_information extends React.Component{
   //   this.setState({songName:name, songUrl:url});
   // }
 
+
   render(){
 
     return(
 
       <ul>
-        <table class = "album_title_list">  {this.state.songNameList} </table>
+        <table class = "album_title_list" width = "100">  {this.state.songNameList} </table>
       </ul>
  
     );
