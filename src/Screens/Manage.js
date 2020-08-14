@@ -34,26 +34,42 @@ class Manage_information extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-
       sheet : this.props.desc,
       songNameList : [],
       songName : null,
       songUrl : null,
+      songId : null,
       discription : 'Write discription this music!'
     };
   }
 
   _delete(id){
-
-    firestore.collection(this.state.sheet).doc(id).delete().then(function() {
-      console.log("Document successfully deleted!");
-  }).catch(function(error) {
-      console.error("Error removing document: ", error);
-  });
-
+    console.log(this.state.songNameList);
+    var i;
+    var delete_id;
+    
+    firestore.collection(this.state.sheet).get()
+    .then(res => {
+      res.forEach(doc => {
+        if(doc.get('songName') === id){
+          firestore.collection(this.state.sheet).doc(doc.id).delete()
+          .then(()=>{
+            alert("삭제완료");
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("삭제실패"+error);
+            return;
+          })
+        }
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
-  handleDelete = (id) => {
+  handleDelete(id){
     this._delete(id);
   }
 
@@ -64,6 +80,7 @@ class Manage_information extends React.Component{
       var doclist = [];
       var doclist2 = [];
       var list = [];
+      var idList = [];
   
       res.forEach(doc => {
         let songname = doc.get('songName');
@@ -73,20 +90,16 @@ class Manage_information extends React.Component{
   
         doclist.push(songname);
         doclist2.push(real_songurl);
+        idList.push(doc.id);
         list.push(
         <tr id = "songName"><Grid item xs={8}>
         {songname}<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></tr>)
       })
       this.setState({songNameList:list});
-      this.setState({songName:doclist[0], songUrl : doclist2[0]});
+      this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
     })
 
   }
-
-  // page_change(name, url){
-  //   this.setState({songName:name, songUrl:url});
-  // }
-
 
   render(){
 
@@ -221,7 +234,6 @@ class Manage extends React.Component{
             </ul>
           </ul>
 
-          <h1>here Managing Page</h1>
           <Manage_information desc = {this.state.page + sheet}></Manage_information>
 
           <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}>
