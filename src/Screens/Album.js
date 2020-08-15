@@ -2,7 +2,6 @@ import React from "react";
 import "../sass/materialize.scss";
 import firebase from "../firebase";
 import {firestore} from '../firebase';
-import { getDocumentScrollLeft } from "materialize-css";
 import '../App.css';
 
 import jQuery from "jquery";

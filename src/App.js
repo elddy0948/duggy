@@ -2,7 +2,8 @@ import React from "react";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Album, Login, Signup, Store, Home, Manage, Admin_Component, Password_reset } from "./Screens";
+import { Album, Login, Signup, Store, Home, 
+  Manage, Admin_Component, Password_reset, Sheet_list } from "./Screens";
 
 import "./sass/materialize.scss";
 import 'materialize-css/dist/css/materialize.min.css';
@@ -57,10 +58,24 @@ class App extends React.Component{
 
     let sidenav = document.querySelector('#slide-out');
     M.Sidenav.init(sidenav, {});
+   
     $(".nav-wrapper #nav-mobile .li1").hover(function(){{
       $(this).find(".ul1").stop().fadeToggle(300);
     }});
 
+    $(document).on("hover", ".nav-wrapper #nav-mobile .li1", function(){
+      $(this).parent().children().removeAttr("style");
+      $(this).parent().children().removeClass("active");
+      $(this).addClass("active");
+      $(this).css({background:'#bdbdbd'});
+    })
+
+    // $(document).on("click", "#songName", function(){
+    //   $(this).parent().children().removeAttr("style");
+    //   $(this).parent().children().removeClass("active");
+    //   $(this).addClass("active");
+    //   $(this).css({background:'#bdbdbd'});
+    // });
   }
 
   /*
@@ -94,11 +109,7 @@ class App extends React.Component{
               <Link to="/">HOME</Link>
             </li>
             <li class = "li1"><a>ALBUM</a>
-              <ul class = "ul1">
-                <li class = "li1"><a href="/album-1Sheet">1 sheet</a></li>
-                <li class = "li1"><a href="/album-2Sheet">2 sheet</a></li>
-                <li class = "li1"><a href="/album-3Sheet">3 sheet</a></li>
-              </ul>
+              <Sheet_list />
             </li>
             <li> 
               <Link to="/store">STORE</Link>
