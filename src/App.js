@@ -3,16 +3,9 @@ import duggyMusic from "./images/DuggyMusic.png";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {
-  Album,
-  Login,
-  Signup,
-  Store,
-  Home,
-  Manage,
-  Admin_Component,
-  Password_reset,
-} from "./Screens";
+
+import { Album, Login, Signup, Store, Home, 
+  Manage, Admin_Component, Password_reset, Sheet_list } from "./Screens";
 
 import "./sass/materialize.scss";
 import "materialize-css/dist/css/materialize.min.css";
@@ -67,11 +60,25 @@ class App extends React.Component {
 
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
-    $(".nav-wrapper #nav-mobile .li1").hover(function () {
-      {
-        $(this).find(".ul1").stop().fadeToggle(300);
-      }
-    });
+
+   
+    $(".nav-wrapper #nav-mobile .li1").hover(function(){{
+      $(this).find(".ul1").stop().fadeToggle(300);
+    }});
+
+    $(document).on("hover", ".nav-wrapper #nav-mobile .li1", function(){
+      $(this).parent().children().removeAttr("style");
+      $(this).parent().children().removeClass("active");
+      $(this).addClass("active");
+      $(this).css({background:'#bdbdbd'});
+    })
+
+    // $(document).on("click", "#songName", function(){
+    //   $(this).parent().children().removeAttr("style");
+    //   $(this).parent().children().removeClass("active");
+    //   $(this).addClass("active");
+    //   $(this).css({background:'#bdbdbd'});
+    // });
   }
 
   /*
@@ -101,10 +108,23 @@ class App extends React.Component {
               <img src={duggyMusic} />
             </h2>
           </a>
-        </div>
-        <nav>
-          <div class="nav-wrapper white">
-            <ul id="nav-mobile" class="left hide-on-med-and-down">
+
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>
+              <Link to="/">HOME</Link>
+            </li>
+            <li class = "li1"><a>ALBUM</a>
+              <Sheet_list />
+            </li>
+            <li> 
+              <Link to="/store">STORE</Link>
+            </li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            {
+              this.state.currentUser ?
+                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
+              :
               <li>
                 <Link to="/" class="black-text">
                   HOME

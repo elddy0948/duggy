@@ -13,3 +13,9 @@ header, main, footer {
     padding-left:320px;
 
   }
+
+  .album_title_list{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    overflow:auto;
+  }

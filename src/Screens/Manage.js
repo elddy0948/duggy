@@ -3,33 +3,112 @@ import "../sass/materialize.scss";
 import "../firebase";
 import "./Manage.css";
 import "../App.css";
-import Typography from "@material-ui/core/Typography";
+import { firestore } from "../firebase";
+import Typography from "@material-ui/core/Typography"; 
 import jQuery from "jquery";
 import $ from 'jquery';
-import {auth} from '../firebase';
+import { withStyles} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from 'material-ui/TextField'; 
+import { ThemeConsumer } from "styled-components";
 window.$ = window.jQuery = jQuery;
+
 const url = "https://duggy-music.firebaseio.com";
+const styles = theme => ({
+  fab:{
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px'
+  }
+})
 
+class Manage_information extends React.Component{
 
-class Manage_score extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      sheet : this.props.desc,
+      songNameList : [],
+      songName : null,
+      songUrl : null,
+      songId : null,
+      discription : 'Write discription this music!'
+    };
+  }
 
-  render(){    
-      var lists = [];
-      var data = this.props.data;
-      var i = 0;
-      while( i < data.length){
+  _delete(id){
+    console.log(this.state.songNameList);
+    var i;
+    var delete_id;
+    
+    firestore.collection(this.state.sheet).get()
+    .then(res => {
+      res.forEach(doc => {
+        if(doc.get('songName') === id){
+          firestore.collection(this.state.sheet).doc(doc.id).delete()
+          .then(()=>{
+            alert("삭제완료");
+            window.location.reload();
+          })
+          .catch(error => {
+            alert("삭제실패"+error);
+            return;
+          })
+        }
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
 
-        lists.push(<li key = {data[i].id}><a href = {"/Content/" + data[i].id}> {data[i].title} </a></li>)
-        i = i + 1;
+  handleDelete(id){
+    this._delete(id);
+  }
 
-      }
+  componentDidMount(){
+
+    firestore.collection(this.state.sheet).get().then(res => {
+
+      var doclist = [];
+      var doclist2 = [];
+      var list = [];
+      var idList = [];
+  
+      res.forEach(doc => {
+        let songname = doc.get('songName');
+        let songurl = '';
+        songurl += doc.get('youtubeURL');
+        let real_songurl = songurl.replace("watch?v=", "embed/");
+  
+        doclist.push(songname);
+        doclist2.push(real_songurl);
+        idList.push(doc.id);
+        list.push(
+        <tr id = "songName"><Grid item xs={8}>
+        {songname}<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></tr>)
+      })
+      this.setState({songNameList:list});
+      this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
+    })
+
+  }
+
+  render(){
 
     return(
 
       <ul>
-        {lists}
+        <table class = "album_title_list" width = "100">  {this.state.songNameList} </table>
       </ul>
-
+ 
     );
   }
 
@@ -37,15 +116,48 @@ class Manage_score extends React.Component{
 
 class Manage_read_album extends React.Component{
 
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      admin_album : {},
+      mode: '',
+    };
+
+  }
+
+  _get(){ 
+
+    fetch(`${url}/album_num.json`).then(res => {
+      if(res.status !== 200){
+        throw new Error(res.statusText); 
+      }
+      return res.json(); 
+    }).then(admin_album => this.setState({admin_album:admin_album})); 
+
+  }
+
+  
+  componentDidMount(){
+    this._get();
+  }
+
+  handleChange(event) {
+    this.setState({mode: event.target.value});
+    console.log(event.target.value);
+  }
+
   render(){
+  
     var lists = [];
-    var data = this.props.data;
+    var data = this.state.admin_album;
     var i = 0;
     while( i < data.length){
-
-      lists.push(<li key = {data[i].id}><a href = {"/manage/" + data[i].id}> {data[i].id}번 앨범 </a></li>)
+      
+      if (data[i].id != null) {
+        lists.push(<li key = {data[i].id} ><a href = {"/manage"} value = {data[i].id} onClick = {this.handleChange} > {data[i].id}번 앨범 </a></li>)
+      }
       i = i + 1;
-
     }
 
     return(
@@ -59,34 +171,34 @@ class Manage_read_album extends React.Component{
 
 
 class Manage extends React.Component{
-  constructor(props){
-    super(props);
+
+  constructor(){ // Manage 컴포넌트 생성자
+    super();
+    this.handlemodeChange = this.handlemodeChange.bind(this);
     this.state = {
       admin_album : {},
       album_information : {},
-      ALBUM_1:[
-        {id:1, title:'1집', desc:'1집 is for information'},
-        {id:2, title:'1집', desc:'1집 is for information'},
-        {id:3, title:'1집', desc:'1집 is for information'}
-      ],
-      ALBUM_2:[],
+      mode: 'welcome',
+
+      words:{},
+      dialog: false,
+      word:'',
+      weight:'',
+      page: '1',
+
     }
 
   }
-  
-  _get(){
-    fetch(`${url}/.json`).then(res => {
-      if(res.status !== 200){ 
-        throw new Error(res.statusText);
-      }
-      return res.json();
-    }).then(admin_album => this.setState({admin_album:admin_album}));
+
+  handlemodeChange = (mode) => {
+    this.setState({mode: mode});
   }
-  // shouldComponentUpdate(nextProbs, nextState){ // react가 제공하는 함수, 
-  //   return nextState.user!= this.state.user; // this.state.user 의 user 변수가 변경이 되는 경우 component를 업데이트 하도록 설정
-  // }
+
+  shouldComponentUpdate(nextProps, nextState){
+    return nextState.admin_album != this.state.album_album;
+  }
+
   componentDidMount(){
-    this._get();
 
     $(document).ready(function($){
       $(".button-collapse").sidenav({
@@ -96,90 +208,41 @@ class Manage extends React.Component{
     });
     
   }
-  
+
 
   render(){
 
-    return(
+    var sheet = "Sheet";
+    const {classes} = this.props;
+
+    return (
       <body class ="wrapping">
-          {/* <nav>
-            <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
-              <i class = " material-icons">menu</i></a>            
-          </nav> */}
-          
-            <ul id ="slide-out" class="sidenav sidenav-fixed">
-              <ul class="collapsible collapsible-expandable">
-              
-                <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
-                  <div class ="collapsible-body" >
-                    <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
-                  </div>
-                </li>
-              
-              </ul>
-            </ul>
-  
-            <h1>here Managing Page</h1>
-            <Manage_score data = {this.state.ALBUM_1}></Manage_score>
-  
-            {Object.keys(this.state.admin_album).map(idx => {
-              const admin_album = this.state.admin_album[idx];
-              const admin_albumidx = idx;
-              console.log(admin_album); // check console
-              return (
-                <div>
-                  <div>{admin_albumidx}번째!</div>
-                  <p></p>
+        {/* <nav>
+          <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
+            <i class = " material-icons">menu</i></a>            
+        </nav> */}
+        
+          <ul id ="slide-out" class="sidenav sidenav-fixed">
+            <ul class="collapsible collapsible-expandable">
+
+              <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+                <div class ="collapsible-body" >
+                  <Manage_read_album onClick = {this.handlemodeChange}></Manage_read_album>
                 </div>
-              );
-            })}
-  
-        </body>
-    )
-    // if(data){
-    //   return(
-    //     <body class ="wrapping">
-    //         {/* <nav>
-    //           <a href ="#" data-target = "slide-out" class = "sidenav-trigger show-on-large">
-    //             <i class = " material-icons">menu</i></a>            
-    //         </nav> */}
+              </li>
             
-    //           <ul id ="slide-out" class="sidenav sidenav-fixed">
-    //             <ul class="collapsible collapsible-expandable">
-                
-    //               <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
-    //                 <div class ="collapsible-body" >
-    //                   <Manage_read_album data = {this.state.admin_album}></Manage_read_album>
-    //                 </div>
-    //               </li>
-                
-    //             </ul>
-    //           </ul>
-    
-    //           <h1>here Managing Page</h1>
-    //           <Manage_score data = {this.state.ALBUM_1}></Manage_score>
-    
-    //           {Object.keys(this.state.admin_album).map(idx => {
-    //             const admin_album = this.state.admin_album[idx];
-    //             const admin_albumidx = idx;
-    //             console.log(admin_album); // check console
-    //             return (
-    //               <div>
-    //                 <div>{admin_albumidx}번째!</div>
-    //                 <p></p>
-    //               </div>
-    //             );
-    //           })}
-    
-    //       </body>
-    //   )
-    // }
-    // else{
-    //   return(
-    //     <div>{window.location.href = "/"}</div>
-    //   )
-    // }
+            </ul>
+          </ul>
+
+          <Manage_information desc = {this.state.page + sheet}></Manage_information>
+
+          <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}>
+            <AddIcon/>
+            {/* <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a> */}
+          </Fab>
+      </body>
+    );
   }
 }
 
-export default Manage;
+export default withStyles(styles)(Manage);
