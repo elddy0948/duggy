@@ -19,6 +19,7 @@ import { auth } from "./firebase";
 
 import jQuery from "jquery";
 import $ from "jquery";
+import { black } from "material-ui/styles/colors";
 window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
@@ -61,16 +62,19 @@ class App extends React.Component {
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
    
-    $("#nav-mobile .li1").hover(function(){{
-      $(this).find(".ul1").stop().fadeToggle(300);
+    // id => # class => .
+
+    /* 건드리지마셈 여기
+    $("#nav-mobile #li1").hover(function(){{
+      $(this).find("#ul1").stop().fadeToggle(300);
     }});
 
-    $(document).on("hover", "#nav-mobile .li1", function(){
+    $(document).on("hover", "#nav-mobile #li1", function(){
       $(this).parent().children().removeAttr("style");
       $(this).parent().children().removeClass("active");
       $(this).addClass("active");
       $(this).css({background:'#bdbdbd'});
-    })
+    }) */
 
     // $(document).on("click", "#songName", function(){
     //   $(this).parent().children().removeAttr("style");
@@ -102,8 +106,8 @@ class App extends React.Component {
     return (
       <Router>
         <a href="/">
-          <h2 class = "center-align"><img src = {duggyMusic}/></h2></a>
-        <nav>
+          <h2 id = "brandLogo" class = "center-align"><img src = {duggyMusic}/></h2></a>
+        <nav class = "white">
           <div>
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li>
@@ -111,9 +115,8 @@ class App extends React.Component {
                 HOME
               </Link>
             </li>
-            <li class="li1">
-              <a class="black-text">ALBUM</a>
-              <Sheet_list />
+            <li id="li1">
+              <a class="black-text" href = "/album">ALBUM</a>
             </li>
             <li>
               <Link to="/store" class="black-text">
@@ -136,7 +139,7 @@ class App extends React.Component {
           </div>
         </nav>
         <Route exact path="/" component={Home} />
-        <Route path="/album-:url" component={Album} />
+        <Route path="/album" component={Album} />
         <Route path="/store" component={Store} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

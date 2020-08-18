@@ -9,3 +9,4 @@ export { default as Manage } from "./Manage";
 export { default as Admin_Component} from "./Admin_Component";
 export { default as Password_reset} from "./Password_reset";
 export { default as Sheet_list} from './Sheet_list';
+export { default as Album_XSheet} from './Album_XSheet';

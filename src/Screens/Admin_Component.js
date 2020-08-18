@@ -15,7 +15,7 @@ class Admin_Component extends React.Component{
     }
 
     componentDidMount(){
-        $(".nav-wrapper #nav-mobile .li2").hover(function(){{
+        $("#nav-mobile .li2").hover(function(){{
             $(this).find(".ul2").stop().fadeToggle(300);
           }});
     }
@@ -32,13 +32,13 @@ class Admin_Component extends React.Component{
         if(admin_check){
           return(
             <li>
-                  <li class = "li2" ><a>{displayname}</a>
+                  <li class = "li2" ><a class = "black-text">{displayname}</a>
                     <ul class = "ul2">
-                      <li class = "li2"><a href="/manage"><i class = "material-icons left">settings</i>Setting</a></li>
+                      <li class = "li2"><a href="/manage" class = "black-text"><i class = "material-icons left">settings</i>Setting</a></li>
                     </ul>
                   </li>
                   <li>
-                    <a onClick = {this.handler_signOut}>Sign Out</a>
+                    <a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a>
                   </li>
             </li>
           )
@@ -46,8 +46,8 @@ class Admin_Component extends React.Component{
         else{
           return(
             <li>
-                  <li class = "li2" ><a class = "user-admin-view">{displayname}</a></li>
-                  <li><a onClick = {this.handler_signOut}>Sign Out</a></li>
+                  <li class = "li2" ><a class = "black_text">{displayname}</a></li>
+                  <li><a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a></li>
             </li>
           )
         }
