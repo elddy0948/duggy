@@ -105,7 +105,7 @@ $card-link-color-light: lighten($card-link-color, 20%) !default;
 // 5. Carousel
 // ==========================================================================
 
-$carousel-height: 400px !default;
+$carousel-height: 700px !default;
 $carousel-item-height: $carousel-height / 2 !default;
 $carousel-item-width: $carousel-item-height !default;
 
@@ -245,7 +245,7 @@ $navbar-line-height: $navbar-height !default;
 $navbar-height-mobile: 56px !default;
 $navbar-line-height-mobile: $navbar-height-mobile !default;
 $navbar-font-size: 1rem !default;
-$navbar-font-color: #fff !default;
+$navbar-font-color: #000000 !default;
 $navbar-brand-font-size: 2.1rem !default;
 
 // 14. Side Navigation
