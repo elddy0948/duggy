@@ -1,23 +1,24 @@
 import React from "react";
+import youtubeIcon from "../images/Youtubeicon.png";
+import instagramIcon from "../images/Instagramicon.png";
 
-class Home extends React.Component{
-  render(){
-    return (
-      <div>
-        <h2>가엾은 중생들이여!</h2>
-        <h3>Duggy 님의 노래를 듣고 참회하소서!</h3>
-        <a href = "https://www.youtube.com/channel/UCvjoc8M_tZKmelczU4EtKAw" target = "_blank">>> 참회는 여기서</a><p></p>
-        <iframe 
-        width="560" 
-        height="315" 
-        src="https://www.youtube.com/embed/twGrfBQhfgE" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-        </iframe>
-      </div>
-    );
-  }
+function Home() {
+  return (
+    <>
+      <body>
+        <h3></h3>
+        <div class="row center-align">
+          <div class="col s6 right-align">
+            <img src={youtubeIcon} />
+          </div>
+          <div class="col s6 left-align">
+            <img src={instagramIcon} />
+          </div>
+        </div>
+        <h1> Home </h1>
+      </body>
+    </>
+  );
 }
 
 export default Home;

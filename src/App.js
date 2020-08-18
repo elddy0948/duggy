@@ -1,18 +1,28 @@
 import React from "react";
+import duggyMusic from "./images/DuggyMusic.png";
 
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Album, Login, Signup, Store, Home, Manage, Admin_Component, Password_reset } from "./Screens";
+import {
+  Album,
+  Login,
+  Signup,
+  Store,
+  Home,
+  Manage,
+  Admin_Component,
+  Password_reset,
+} from "./Screens";
 
 import "./sass/materialize.scss";
-import 'materialize-css/dist/css/materialize.min.css';
-import M from  'materialize-css/dist/js/materialize.min.js';
+import "materialize-css/dist/css/materialize.min.css";
+import M from "materialize-css/dist/js/materialize.min.js";
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/firestore';
-import {auth} from './firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
+import "firebase/firestore";
+import { auth } from "./firebase";
 
 import jQuery from "jquery";
 import $ from "jquery";
@@ -20,14 +30,13 @@ window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
 
-class App extends React.Component{
-
-  constructor(props){
+class App extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-        currentUser : null,
-        administrator : null
-    }
+      currentUser: null,
+      administrator: null,
+    };
   }
 
   /*
@@ -40,27 +49,29 @@ class App extends React.Component{
 
   unsubscribeFromAuth = null;
 
-  componentDidMount(){
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({currentUser : user});
-      if(user){
+  componentDidMount() {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      this.setState({ currentUser: user });
+      if (user) {
         fetch(`${url}/duggy_music_admin.json`)
-        .then(res => {return res.json()})
-        .then(ress => {
-          this.setState({administrator : ress});
-        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((ress) => {
+            this.setState({ administrator: ress });
+          });
+      } else {
+        this.setState({ administrator: null });
       }
-      else{
-        this.setState({administrator : null});
-      }
-    })
+    });
 
-    let sidenav = document.querySelector('#slide-out');
+    let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
-    $(".nav-wrapper #nav-mobile .li1").hover(function(){{
-      $(this).find(".ul1").stop().fadeToggle(300);
-    }});
-
+    $(".nav-wrapper #nav-mobile .li1").hover(function () {
+      {
+        $(this).find(".ul1").stop().fadeToggle(300);
+      }
+    });
   }
 
   /*
@@ -71,65 +82,104 @@ class App extends React.Component{
   이후 App 컴포넌트가 unmount 되면 이 값이 호출되도록 해주면 close subscription이 가능함
   */
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
 
   handler_signOut = () => {
-    auth.signOut().then(()=>{
+    auth.signOut().then(() => {
       window.location.href = "/";
     });
-  }
-
-  render(){
-    return(
-      <Router>
-      <nav>
-        <div class="nav-wrapper">
-          <a href="/" class="brand-logo center">
-            Duggy-Music
-          </a>
-          <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li>
-              <Link to="/">HOME</Link>
-            </li>
-            <li class = "li1"><a>ALBUM</a>
-              <ul class = "ul1">
-                <li class = "li1"><a href="/album-1Sheet">1 sheet</a></li>
-                <li class = "li1"><a href="/album-2Sheet">2 sheet</a></li>
-                <li class = "li1"><a href="/album-3Sheet">3 sheet</a></li>
-              </ul>
-            </li>
-            <li>
-              <Link to="/store">STORE</Link>
-            </li>
-          </ul>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            {
-              this.state.currentUser ?
-                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
-              :
-              <li>
-                <li><Link to = "/login">LOGIN</Link></li>
-                <li><Link to="/signup">SIGNUP</Link></li>
-              </li>
-            }
-          </ul>
-        </div>
-      </nav>
-      <Route exact path="/" component={Home} />
-      <Route path="/album-:url" component={Album} />
-      <Route path="/store" component={Store} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={Signup} />
-      <Route path="/manage" 
-        render={() => 
-        this.state.currentUser ? this.state.currentUser.email === this.state.administrator ? <Manage /> 
-        : <Home /> : <Home /> } />
-      <Route path="/password_reset" component={Password_reset} />
-    </Router>
-    )
   };
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <a href="/" class="center-align">
+            <h2 class="center-align">
+              <img src={duggyMusic} />
+            </h2>
+          </a>
+        </div>
+        <nav>
+          <div class="nav-wrapper white">
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+              <li>
+                <Link to="/" class="black-text">
+                  HOME
+                </Link>
+              </li>
+              <li class="li1">
+                <a class="black-text">ALBUM</a>
+                <ul class="ul1">
+                  <li class="li1">
+                    <a href="/album-1Sheet">1 sheet</a>
+                  </li>
+                  <li class="li1">
+                    <a href="/album-2Sheet">2 sheet</a>
+                  </li>
+                  <li class="li1">
+                    <a href="/album-3Sheet">3 sheet</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Link to="/store" class="black-text">
+                  STORE
+                </Link>
+              </li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              {this.state.currentUser ? (
+                <Admin_Component
+                  displayname={this.state.currentUser.displayName}
+                  admintrue={
+                    this.state.currentUser.email === this.state.administrator
+                      ? true
+                      : false
+                  }
+                />
+              ) : (
+                <li>
+                  <li>
+                    <Link to="/login" class="black-text">
+                      LOGIN
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/signup" class="black-text">
+                      SIGNUP
+                    </Link>
+                  </li>
+                </li>
+              )}
+            </ul>
+          </div>
+        </nav>
+        <Route exact path="/" component={Home} />
+        <Route path="/album-:url" component={Album} />
+        <Route path="/store" component={Store} />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+        <Route
+          path="/manage"
+          render={() =>
+            this.state.currentUser ? (
+              this.state.currentUser.email === this.state.administrator ? (
+                <Manage />
+              ) : (
+                <Home />
+              )
+            ) : (
+              <Home />
+            )
+          }
+        />
+        <Route path="/password_reset" component={Password_reset} />
+      </Router>
+    );
+  }
 }
 
 export default App;
