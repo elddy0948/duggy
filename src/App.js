@@ -4,8 +4,17 @@ import duggyMusic from "./images/DuggyMusic.png";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import { Album, Login, Signup, Store, Home, 
-  Manage, Admin_Component, Password_reset, Sheet_list } from "./Screens";
+import {
+  Album,
+  Login,
+  Signup,
+  Store,
+  Home,
+  Manage,
+  Admin_Component,
+  Password_reset,
+  Sheet_list,
+} from "./Screens";
 
 import "./sass/materialize.scss";
 import "materialize-css/dist/css/materialize.min.css";
@@ -131,10 +140,45 @@ class App extends React.Component {
                 <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
               :              
               <li>
-               <li><Link to="/login" class="black-text">LOGIN</Link></li>
-               <li><Link to="/signup" class="black-text">SIGNUP</Link></li>
+                <Link to="/" class="black-text">
+                  HOME
+                </Link>
               </li>
-              }
+              <li class="li1">
+                <a class="black-text">ALBUM</a>
+                <Sheet_list />
+              </li>
+              <li>
+                <Link to="/store" class="black-text">
+                  STORE
+                </Link>
+              </li>
+            </ul>
+
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              {this.state.currentUser ? (
+                <Admin_Component
+                  displayname={this.state.currentUser.displayName}
+                  admintrue={
+                    this.state.currentUser.email === this.state.administrator
+                      ? true
+                      : false
+                  }
+                />
+              ) : (
+                <li>
+                  <li>
+                    <Link to="/login" class="black-text">
+                      LOGIN
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/signup" class="black-text">
+                      SIGNUP
+                    </Link>
+                  </li>
+                </li>
+              )}
             </ul>
           </div>
         </nav>

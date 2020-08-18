@@ -11,16 +11,15 @@ import jQuery from "jquery";
 import $ from "jquery";
 window.$ = window.jQuery = jQuery;
 
-class Album extends React.Component{
-
-  constructor(props){
+class Album extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-      sheet : props.match.params.url,
-      songNameList : [],
-      songName : null,
-      songUrl : null,
-      discription : 'Write discription this music!'
+      sheet: props.match.params.url,
+      songNameList: [],
+      songName: null,
+      songUrl: null,
+      discription: "Write discription this music!",
     };
   }
 
@@ -31,7 +30,7 @@ class Album extends React.Component{
       $(this).parent().children().removeAttr("style");
       $(this).parent().children().removeClass("active");
       $(this).addClass("active");
-      $(this).css({background:'#bdbdbd'});
+      $(this).css({ background: "#bdbdbd" });
     });
 
     // $(document).on("ready", ".tabs", function(){
@@ -47,13 +46,12 @@ class Album extends React.Component{
     // })
   }
 
-  render(){
-
+  render() {
     return (
       <div id = "album_top">
         <Sheet_list/>
       </div>
-    )
+    );
   }
 }
 

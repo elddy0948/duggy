@@ -21,10 +21,17 @@ function Home() {
         <h3></h3>
         <div class="row center-align">
           <div class="col s6 right-align">
-            <img src={youtubeIcon} />
+            <a
+              target="_blank"
+              href="https://www.youtube.com/channel/UCvjoc8M_tZKmelczU4EtKAw"
+            >
+              <img src={youtubeIcon} />
+            </a>
           </div>
           <div class="col s6 left-align">
-            <img src={instagramIcon} />
+            <a target="_blank" href="https://www.instagram.com/hyun_duggy/">
+              <img src={instagramIcon} />
+            </a>
           </div>
         </div>
         <div class = "row">
