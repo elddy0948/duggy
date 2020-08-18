@@ -60,13 +60,12 @@ class App extends React.Component {
 
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
-
    
-    $(".nav-wrapper #nav-mobile .li1").hover(function(){{
+    $("#nav-mobile .li1").hover(function(){{
       $(this).find(".ul1").stop().fadeToggle(300);
     }});
 
-    $(document).on("hover", ".nav-wrapper #nav-mobile .li1", function(){
+    $(document).on("hover", "#nav-mobile .li1", function(){
       $(this).parent().children().removeAttr("style");
       $(this).parent().children().removeClass("active");
       $(this).addClass("active");
@@ -102,78 +101,37 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div>
-          <a href="/" class="center-align">
-            <h2 class="center-align">
-              <img src={duggyMusic} />
-            </h2>
-          </a>
-
+        <a href="/">
+          <h2 class = "center-align"><img src = {duggyMusic}/></h2></a>
+        <nav>
+          <div>
           <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li>
-              <Link to="/">HOME</Link>
+              <Link to="/" class="black-text">
+                HOME
+              </Link>
             </li>
-            <li class = "li1"><a>ALBUM</a>
+            <li class="li1">
+              <a class="black-text">ALBUM</a>
               <Sheet_list />
             </li>
-            <li> 
-              <Link to="/store">STORE</Link>
+            <li>
+              <Link to="/store" class="black-text">
+                STORE
+              </Link>
             </li>
           </ul>
+          
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             {
               this.state.currentUser ?
                 <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
-              :
+              :              
               <li>
-                <Link to="/" class="black-text">
-                  HOME
-                </Link>
+               <li><Link to="/login" class="black-text">LOGIN</Link></li>
+               <li><Link to="/signup" class="black-text">SIGNUP</Link></li>
               </li>
-              <li class="li1">
-                <a class="black-text">ALBUM</a>
-                <ul class="ul1">
-                  <li class="li1">
-                    <a href="/album-1Sheet">1 sheet</a>
-                  </li>
-                  <li class="li1">
-                    <a href="/album-2Sheet">2 sheet</a>
-                  </li>
-                  <li class="li1">
-                    <a href="/album-3Sheet">3 sheet</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link to="/store" class="black-text">
-                  STORE
-                </Link>
-              </li>
-            </ul>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-              {this.state.currentUser ? (
-                <Admin_Component
-                  displayname={this.state.currentUser.displayName}
-                  admintrue={
-                    this.state.currentUser.email === this.state.administrator
-                      ? true
-                      : false
-                  }
-                />
-              ) : (
-                <li>
-                  <li>
-                    <Link to="/login" class="black-text">
-                      LOGIN
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/signup" class="black-text">
-                      SIGNUP
-                    </Link>
-                  </li>
-                </li>
-              )}
+              }
             </ul>
           </div>
         </nav>
