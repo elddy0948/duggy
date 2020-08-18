@@ -15,12 +15,15 @@ import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from 'material-ui/TextField'; 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ThemeConsumer } from "styled-components";
 window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
+
 const styles = theme => ({
   fab:{
     position: 'fixed',
@@ -92,8 +95,8 @@ class Manage_information extends React.Component{
         doclist2.push(real_songurl);
         idList.push(doc.id);
         list.push(
-        <tr id = "songName"><Grid item xs={8}>
-        {songname}<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></tr>)
+        <li key = {songname}><ul id = "songName"><Grid item xs={8}>
+        {songname}&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></ul></li>)
       })
       this.setState({songNameList:list});
       this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
@@ -105,8 +108,8 @@ class Manage_information extends React.Component{
 
     return(
 
-      <ul>
-        <table class = "album_title_list" width = "100">  {this.state.songNameList} </table>
+      <ul class = "album_title_list" width = "100">
+         {this.state.songNameList}
       </ul>
  
     );
@@ -172,21 +175,37 @@ class Manage_read_album extends React.Component{
 
 class Manage extends React.Component{
 
-  constructor(){ // Manage 컴포넌트 생성자
+  constructor(){
     super();
     this.handlemodeChange = this.handlemodeChange.bind(this);
     this.state = {
       admin_album : {},
       album_information : {},
       mode: 'welcome',
+      page: '1',
 
       words:{},
       dialog: false,
-      word:'',
-      weight:'',
-      page: '1',
+      information:'',
+      upload_file_name:'',
+      upload_file_type:'',
 
     }
+
+  }
+
+  _post(information) {
+
+    firestore.collection(this.state.page + "Sheet").doc().set({
+      songName: information.upload_file_name,
+      youtubeURL: "aaaa",
+    })
+    .then(() => {
+      window.location.reload();
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
 
   }
 
@@ -209,6 +228,27 @@ class Manage extends React.Component{
     
   }
 
+  handleDialogToggle = () => this.setState({
+    dialog: !this.state.dialog
+  })
+
+  handleValueChange = (e) => {
+    let nextState = {};
+    nextState[e.target.name] = e.target.value;
+    this.setState(nextState);
+  }
+
+  handleSubmit = () => {
+
+    const information = {
+      upload_file_type : this.state.upload_file_type,
+      upload_file_name : this.state.upload_file_name,
+    }
+    this.handleDialogToggle();
+    if(!information.upload_file_name && !information.upload_file_type) return;
+    this._post(information);
+  }
+
 
   render(){
 
@@ -225,7 +265,7 @@ class Manage extends React.Component{
           <ul id ="slide-out" class="sidenav sidenav-fixed">
             <ul class="collapsible collapsible-expandable">
 
-              <li><a class="collapsible-header">ALBUM<i class="material-icons right">arrow_drop_down</i></a>
+              <li><a class="collapsible-header">Song<i class="material-icons right">arrow_drop_down</i></a>
                 <div class ="collapsible-body" >
                   <Manage_read_album onClick = {this.handlemodeChange}></Manage_read_album>
                 </div>
@@ -236,13 +276,29 @@ class Manage extends React.Component{
 
           <Manage_information desc = {this.state.page + sheet}></Manage_information>
 
-          <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}>
-            <AddIcon/>
-            {/* <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a> */}
-          </Fab>
+          <MuiThemeProvider>
+          <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}><AddIcon/></Fab>
+          <Dialog open={this.state.dialog} onClose = {this.handleDialogToggle}>
+            <DialogTitle >파일 업로드</DialogTitle>
+            <DialogContentText>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다음 정보를 기입해 주십시오.
+            </DialogContentText>
+            <DialogContent>
+              <TextField autofocus label = "파일타입" type ="text" name="upload_file_type" value={this.state.upload_file_type} onChange={this.handleValueChange} /><br />
+              <TextField autofocus label = "파일이름" type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br />
+            </DialogContent>
+            <DialogActions>
+              <Button variant ="contained" color="primary" onClick = {this.handleSubmit}>추가</Button>
+              <Button variant ="outlined" color="primary" onClick ={this.handleDialogToggle}>닫기</Button>
+            </DialogActions>
+          </Dialog>
+          </MuiThemeProvider>
+
       </body>
     );
   }
 }
 
 export default withStyles(styles)(Manage);
+
+ {/* <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a> */}
