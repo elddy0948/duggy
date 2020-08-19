@@ -16,6 +16,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from 'material-ui/TextField'; 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -95,8 +98,9 @@ class Manage_information extends React.Component{
         doclist2.push(real_songurl);
         idList.push(doc.id);
         list.push(
-        <li key = {songname}><ul id = "songName"><Grid item xs={8}>
-        {songname}&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></ul></li>)
+        <li key = {songname}><ul id = "songName"><Grid item xs={8} >
+        {songname}&nbsp;&nbsp;&nbsp;<Button size="small"  variant="contained" color="secondary" onClick={() => this.handleDelete(songname)}>삭제
+        </Button></Grid></ul></li>)
       })
       this.setState({songNameList:list});
       this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
@@ -104,6 +108,34 @@ class Manage_information extends React.Component{
 
   }
 
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.desc !== prevProps.desc){
+        this.setState({sheet:this.props.desc});
+        firestore.collection(this.props.desc).get().then(res => {
+
+            var doclist = [];
+            var doclist2 = [];
+            var list = [];
+            var idList = [];
+        
+            res.forEach(doc => {
+              let songname = doc.get('songName');
+              let songurl = '';
+              songurl += doc.get('youtubeURL');
+              let real_songurl = songurl.replace("watch?v=", "embed/");
+        
+              doclist.push(songname);
+              doclist2.push(real_songurl);
+              idList.push(doc.id);
+              list.push(
+              <li key = {songname}><ul id = "songName"><Grid item xs={8}>
+              {songname}&nbsp;&nbsp;&nbsp;<Button size="small" variant="contained" color="secondary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></ul></li>)
+            })
+            this.setState({songNameList:list});
+            this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
+          })
+    }
+}
   render(){
 
     return(
@@ -117,78 +149,21 @@ class Manage_information extends React.Component{
 
 }
 
-class Manage_read_album extends React.Component{
-
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      admin_album : {},
-      mode: '',
-    };
-
-  }
-
-  _get(){ 
-
-    fetch(`${url}/album_num.json`).then(res => {
-      if(res.status !== 200){
-        throw new Error(res.statusText); 
-      }
-      return res.json(); 
-    }).then(admin_album => this.setState({admin_album:admin_album})); 
-
-  }
-
-  
-  componentDidMount(){
-    this._get();
-  }
-
-  handleChange(event) {
-    this.setState({mode: event.target.value});
-    console.log(event.target.value);
-  }
-
-  render(){
-  
-    var lists = [];
-    var data = this.state.admin_album;
-    var i = 0;
-    while( i < data.length){
-      
-      if (data[i].id != null) {
-        lists.push(<li key = {data[i].id} ><a href = {"/manage"} value = {data[i].id} onClick = {this.handleChange} > {data[i].id}번 앨범 </a></li>)
-      }
-      i = i + 1;
-    }
-
-    return(
-        <ul>
-          {lists}
-        </ul>
-    );
-  }
-}
-
-
-
 class Manage extends React.Component{
 
   constructor(){
     super();
-    this.handlemodeChange = this.handlemodeChange.bind(this);
     this.state = {
-      admin_album : {},
+      admin_album : [],
       album_information : {},
-      mode: 'welcome',
-      page: '1',
+      sheet : '1Sheet',
 
       words:{},
       dialog: false,
       information:'',
       upload_file_name:'',
       upload_file_type:'',
+      upload_file_infor: '',
 
     }
 
@@ -196,9 +171,9 @@ class Manage extends React.Component{
 
   _post(information) {
 
-    firestore.collection(this.state.page + "Sheet").doc().set({
+    firestore.collection(this.state.sheet).doc().set({
       songName: information.upload_file_name,
-      youtubeURL: "aaaa",
+      youtubeURL: information.upload_file_infor,
     })
     .then(() => {
       window.location.reload();
@@ -209,23 +184,41 @@ class Manage extends React.Component{
 
   }
 
-  handlemodeChange = (mode) => {
-    this.setState({mode: mode});
-  }
-
   shouldComponentUpdate(nextProps, nextState){
     return nextState.admin_album != this.state.album_album;
   }
 
   componentDidMount(){
 
-    $(document).ready(function($){
-      $(".button-collapse").sidenav({
-        menuWidth: 275
-      });
-      $('.collapsible').collapsible();
-    });
+     //side-nav sheet-list
+     firestore.collection('SheetList').get()
+     .then(res => {
+       res.forEach(doc => {
+         var sheetlist = [];
+         var list = doc.get('list');
+         var i;
     
+         list.forEach(e => {
+           sheetlist.push(<li><a href = "#" onClick = {() => this.sheet_change(e)}>{e[0]+"번째 앨범"}</a></li>)
+         })
+ 
+         this.setState({admin_album : sheetlist});
+       })
+
+       // side-nav jquery
+       $(document).ready(function(){
+         $(".button-collapse").sidenav({
+           menuWidth: 275
+         });
+         $('.collapsible').collapsible();
+       });
+     })
+     
+   }
+ 
+   sheet_change(sheetnum){
+     this.setState({sheet : sheetnum});
+     localStorage.setItem('item1', sheetnum);
   }
 
   handleDialogToggle = () => this.setState({
@@ -238,21 +231,27 @@ class Manage extends React.Component{
     this.setState(nextState);
   }
 
+  handletypechange = (e) =>{
+    this.setState({upload_file_type: e.target.value});
+  }
+
   handleSubmit = () => {
 
     const information = {
       upload_file_type : this.state.upload_file_type,
       upload_file_name : this.state.upload_file_name,
+      upload_file_infor : this.state.upload_file_infor,
     }
     this.handleDialogToggle();
-    if(!information.upload_file_name && !information.upload_file_type) return;
-    this._post(information);
+    if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor) return;
+    else if (information.upload_file_type == "song") this._post(information);
+    else if(information.upload_file_type == "score");
+
   }
 
 
   render(){
 
-    var sheet = "Sheet";
     const {classes} = this.props;
 
     return (
@@ -262,19 +261,20 @@ class Manage extends React.Component{
             <i class = " material-icons">menu</i></a>            
         </nav> */}
         
-          <ul id ="slide-out" class="sidenav sidenav-fixed">
+        <ul id ="slide-out" class="sidenav sidenav-fixed">
             <ul class="collapsible collapsible-expandable">
 
-              <li><a class="collapsible-header">Song<i class="material-icons right">arrow_drop_down</i></a>
-                <div class ="collapsible-body" >
-                  <Manage_read_album onClick = {this.handlemodeChange}></Manage_read_album>
+              <li>
+                <a class="collapsible-header">Song<i class="material-icons right">arrow_drop_down</i></a>
+                <div class = "collapsible-body">
+                  {this.state.admin_album}
                 </div>
               </li>
             
             </ul>
           </ul>
 
-          <Manage_information desc = {this.state.page + sheet}></Manage_information>
+          <Manage_information desc = {this.state.sheet}></Manage_information>
 
           <MuiThemeProvider>
           <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}><AddIcon/></Fab>
@@ -284,8 +284,21 @@ class Manage extends React.Component{
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다음 정보를 기입해 주십시오.
             </DialogContentText>
             <DialogContent>
-              <TextField autofocus label = "파일타입" type ="text" name="upload_file_type" value={this.state.upload_file_type} onChange={this.handleValueChange} /><br />
-              <TextField autofocus label = "파일이름" type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br />
+              <InputLabel htmlFor="max-width">파일타입</InputLabel>
+              <Select
+                autoFocus
+                val={this.props.value}
+                onChange={this.handletypechange}
+              >
+                <MenuItem value={false}>false</MenuItem>
+                <MenuItem value="song">곡</MenuItem>
+                <MenuItem value="score">악보</MenuItem>
+              </Select><br /><br />
+
+              <InputLabel>파일이름</InputLabel>
+              <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
+              <InputLabel>기타정보</InputLabel>
+              <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
             </DialogContent>
             <DialogActions>
               <Button variant ="contained" color="primary" onClick = {this.handleSubmit}>추가</Button>
