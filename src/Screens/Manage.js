@@ -239,9 +239,15 @@ class Manage extends React.Component{
      localStorage.setItem('item1', sheetnum);
   }
 
-  handleDialogToggle = () => this.setState({
-    dialog: !this.state.dialog
-  })
+  handleDialogToggle = () => {
+    this.setState({
+    dialog: !this.state.dialog,
+    up_file: '',
+    })
+    if(this.state.up_file == ''){
+      this.setState({B_C: "primary"});
+    }
+}
 
   handleValueChange = (e) => {
     let nextState = {};
@@ -267,13 +273,11 @@ class Manage extends React.Component{
   }
 
   handleUploadChange = e => {
+    console.log(e.target.files);
     if(e.target.files[0]){
       const up_file = e.target.files[0];
       this.setState(() => ({up_file}));
       this.setState({B_C: "secondary"});
-    }
-    else{
-      this.setState({B_C: "primary"});
     }
   };
 
@@ -296,8 +300,10 @@ class Manage extends React.Component{
         .child(up_file.name)
         .getDownloadURL()
         .then(url => {
+            this.setState({B_C: "primary"});
             console.log(url);
             console.log("success");
+            this.setState({up_file: ''});
         });
 
       }
