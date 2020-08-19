@@ -19,3 +19,17 @@ header, main, footer {
     grid-template-columns: 1fr 1fr;
     overflow:auto;
   }
+
+  .border {
+    border: 2px blue dashed;
+  }
+  
+  .mr-0 {
+    margin-right: 0;
+  }
+  .ml-auto {
+    margin-left:auto;
+  }
+  .d-block {
+    display:block;
+  }
