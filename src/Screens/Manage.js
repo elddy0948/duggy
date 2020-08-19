@@ -4,6 +4,7 @@ import "../firebase";
 import "./Manage.css";
 import "../App.css";
 import { firestore } from "../firebase";
+import { storage } from "../firebase";
 import Typography from "@material-ui/core/Typography"; 
 import jQuery from "jquery";
 import $ from 'jquery';
@@ -32,7 +33,15 @@ const styles = theme => ({
     position: 'fixed',
     bottom: '20px',
     right: '20px'
-  }
+  },
+  root: {
+    '& > *': {
+      margin: theme.spacing(3),
+    },
+  },
+  input: {
+    display: 'none',
+  },
 })
 
 class Manage_information extends React.Component{
@@ -155,6 +164,7 @@ class Manage extends React.Component{
     super();
     this.state = {
       admin_album : [],
+      admin_score :[],
       album_information : {},
       sheet : '1Sheet',
 
@@ -165,7 +175,14 @@ class Manage extends React.Component{
       upload_file_type:'',
       upload_file_infor: '',
 
+      up_file: null,
+      url: '',
+      progress: 0,
     }
+
+    this.handleUploadChange = this.handleUploadChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
 
   }
 
@@ -176,9 +193,7 @@ class Manage extends React.Component{
       youtubeURL: information.upload_file_infor,
     })
     .then(() => {
-      localStorage.setItem('item1', this.state.sheet);
       window.location.reload();
-      this.setState({sheet: localStorage.getItem('item1')});
     })
     .catch(function(error) {
       console.error("Error writing document: ", error);
@@ -245,17 +260,48 @@ class Manage extends React.Component{
       upload_file_infor : this.state.upload_file_infor,
     }
     this.handleDialogToggle();
-    if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor) return;
+    if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor && !information.upload_file) return;
     else if (information.upload_file_type == "song") this._post(information);
     else if(information.upload_file_type == "score");
-
   }
 
+  handleUploadChange = e => {
+    if(e.target.files[0]){
+      const up_file = e.target.files[0];
+      this.setState(() => ({up_file}));
+    }
+  };
+
+  handleUpload = e => {
+
+    const {up_file} = this.state;
+    console.log(up_file);
+    const uploadTask = storage.ref(`Music/${up_file.name}`).put(up_file);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        this.setState({progress});
+      },
+      error =>{
+        console.log(error);
+      },
+      () => {
+        storage.ref('Music')
+        .child(up_file.name)
+        .getDownloadURL()
+        .then(url => {
+            console.log(url);
+            console.log("success");
+        });
+
+      }
+    )
+  }
 
   render(){
 
     const {classes} = this.props;
-
     return (
       <body class ="wrapping">
         {/* <nav>
@@ -272,6 +318,13 @@ class Manage extends React.Component{
                   {this.state.admin_album}
                 </div>
               </li>
+
+              <li>
+                <a class="collapsible-header">Score<i class="material-icons right">arrow_drop_down</i></a>
+                <div class = "collapsible-body">
+                  {this.state.admin_score}
+                </div>
+              </li>
             
             </ul>
           </ul>
@@ -286,7 +339,7 @@ class Manage extends React.Component{
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다음 정보를 기입해 주십시오.
             </DialogContentText>
             <DialogContent>
-              <InputLabel htmlFor="max-width">파일타입</InputLabel>
+              <InputLabel>파일타입</InputLabel>
               <Select
                 autoFocus
                 val={this.props.value}
@@ -301,6 +354,23 @@ class Manage extends React.Component{
               <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
               <InputLabel>기타정보</InputLabel>
               <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
+
+              <div className={classes.root}>
+              <progress value ={this.state.progress} max = "100" /> <br/>
+               <input
+                accept="audio/*"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+                onChange = {this.handleUploadChange}
+               />
+                <label htmlFor="contained-button-file" >
+                <Button variant="contained" color="primary" component="span"> Choose </Button>
+                </label>
+                <Button variant="contained" color="primary" component="span" onClick = {this.handleUpload}> Upload </Button>
+              </div>
+
             </DialogContent>
             <DialogActions>
               <Button variant ="contained" color="primary" onClick = {this.handleSubmit}>추가</Button>

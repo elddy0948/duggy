@@ -20,16 +20,10 @@ header, main, footer {
     overflow:auto;
   }
 
-  .border {
-    border: 2px blue dashed;
+  progress{
+
+    width: 82%;
+    height: 20px;
+
   }
-  
-  .mr-0 {
-    margin-right: 0;
-  }
-  .ml-auto {
-    margin-left:auto;
-  }
-  .d-block {
-    display:block;
-  }
+
