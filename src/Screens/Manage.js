@@ -176,7 +176,9 @@ class Manage extends React.Component{
       youtubeURL: information.upload_file_infor,
     })
     .then(() => {
+      localStorage.setItem('item1', this.state.sheet);
       window.location.reload();
+      this.setState({sheet: localStorage.getItem('item1')});
     })
     .catch(function(error) {
       console.error("Error writing document: ", error);
