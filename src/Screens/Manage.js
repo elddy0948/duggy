@@ -178,6 +178,7 @@ class Manage extends React.Component{
       up_file: null,
       url: '',
       progress: 0,
+      B_C: "primary",
     }
 
     this.handleUploadChange = this.handleUploadChange.bind(this);
@@ -269,6 +270,10 @@ class Manage extends React.Component{
     if(e.target.files[0]){
       const up_file = e.target.files[0];
       this.setState(() => ({up_file}));
+      this.setState({B_C: "secondary"});
+    }
+    else{
+      this.setState({B_C: "primary"});
     }
   };
 
@@ -368,7 +373,7 @@ class Manage extends React.Component{
                 <label htmlFor="contained-button-file" >
                 <Button variant="contained" color="primary" component="span"> Choose </Button>
                 </label>
-                <Button variant="contained" color="primary" component="span" onClick = {this.handleUpload}> Upload </Button>
+                <Button variant="contained" color={this.state.B_C} component="span" onClick = {this.handleUpload}> Upload </Button>
               </div>
 
             </DialogContent>
