@@ -96,7 +96,8 @@ class Album_XSheet extends React.Component{
                 <div id = "album_primary_row2_discription">
                   <div id = "album_primary_row_div"/>
                   <div id = "album_primary_discription">{this.state.discription}</div>
-                  <div id = "album_primary_row_div"/>
+                  <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn"><i class = "material-icons left">shopping_cart</i>cart</button>
+                  {/* <div id = "album_primary_row_div"/> */}
                 </div>
               </div>
             </div>
