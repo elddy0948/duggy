@@ -24,6 +24,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from 'material-ui/TextField'; 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ThemeConsumer } from "styled-components";
+import M from 'materialize-css';
 window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
@@ -42,6 +43,9 @@ const styles = theme => ({
   input: {
     display: 'none',
   },
+  scroll:{
+    overflow : 'hidden',
+  }
 })
 
 class Manage_information extends React.Component{
@@ -275,7 +279,7 @@ class Manage extends React.Component{
          $('.collapsible').collapsible();
        });
      })
-     
+
    }
  
    sheet_change(sheetnum){
@@ -395,6 +399,9 @@ class Manage extends React.Component{
 
           <Manage_information desc = {this.state.sheet} type_val = {this.state.sheet_type}></Manage_information>
 
+          {
+
+          this.state.sheet != "welcome" ?
           <MuiThemeProvider>
           <Fab color= "primary" className ={classes.fab} onClick={this.handleDialogToggle}><AddIcon/></Fab>
           <Dialog open={this.state.dialog} onClose = {this.handleDialogToggle}>
@@ -402,7 +409,8 @@ class Manage extends React.Component{
             <DialogContentText>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;다음 정보를 기입해 주십시오.
             </DialogContentText>
-            <DialogContent>
+            
+            <DialogContent className ={classes.scroll}>
               <InputLabel>파일타입</InputLabel>
               <Select
                 autoFocus
@@ -412,10 +420,15 @@ class Manage extends React.Component{
                 <MenuItem value="song">곡</MenuItem>
                 <MenuItem value="score">악보</MenuItem>
               </Select><br /><br />
+            </DialogContent>
 
+              {
+              
+              (this.state.upload_file_type == "song") ?
+              <DialogContent className ={classes.scroll}>
               <InputLabel>파일이름</InputLabel>
               <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
-              <InputLabel>기타정보</InputLabel>
+              <InputLabel>URL</InputLabel>
               <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
 
               <div className={classes.root}>
@@ -433,14 +446,46 @@ class Manage extends React.Component{
                 </label>
                 <Button variant="contained" color={this.state.B_C} component="span" onClick = {this.handleUpload}> Upload </Button>
               </div>
+              </DialogContent>
+              :
+              
+              (this.state.upload_file_type == "score") ?
+              <DialogContent className ={classes.scroll}>
+              <InputLabel>파일이름</InputLabel>
+              <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
+              <InputLabel>기타정보</InputLabel>
+              <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
 
-            </DialogContent>
+              <div className={classes.root}>
+              <progress value ={this.state.progress} max = "100" /> <br/>
+               <input
+                accept=".pdf"
+                className={classes.input}
+                id="contained-button-file"
+                multiple
+                type="file"
+                onChange = {this.handleUploadChange}
+               />
+                <label htmlFor="contained-button-file" >
+                <Button variant="contained" color="primary" component="span"> Choose </Button>
+                </label>
+                <Button variant="contained" color={this.state.B_C} component="span" onClick = {this.handleUpload}> Upload </Button>
+              </div>
+              </DialogContent>
+              :
+              <div>
+              </div>
+              }
+
             <DialogActions>
               <Button variant ="contained" color={this.state.B_C2} onClick = {this.handleSubmit}>추가</Button>
               <Button variant ="outlined" color="primary" onClick ={this.handleDialogToggle}>닫기</Button>
             </DialogActions>
           </Dialog>
           </MuiThemeProvider>
+          :
+          <div></div>
+          }
 
       </body>
     );
