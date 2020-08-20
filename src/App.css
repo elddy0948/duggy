@@ -111,6 +111,7 @@
   position: absolute;
   display:none;
   background-color: #e57373;
+  z-index: 1;
 }
 
 .album_grid{
@@ -138,13 +139,18 @@
 
 #album_primary_row2{
   display:grid;
-  grid-template-rows: 68px 1fr;
+  grid-template-rows: 80px 1fr;
 }
 
-#album_primary_row2_title, #album_primary_row2_discription{
+#album_primary_row2_title{
   display:grid;
   /* grid-template-columns: 1.1fr 10fr 2fr; */
   grid-template-columns: 1fr 728px 1fr;
+}
+
+#album_primary_row2_discription{
+  display:grid;
+  grid-template-columns: 1fr 8fr 120px 1fr;
 }
 
 #album_primary_songName{
@@ -152,6 +158,11 @@
   padding-bottom:1%;
   font-size:30px;
   border-bottom:1.2px solid #bdbdbd;
+}
+
+#album_primary_row2_shopbtn{
+  margin-top:10px;
+  font-size:18px;
 }
 
 #album_primary_discription{
@@ -176,7 +187,7 @@
 
 #album_songNameList_table{
   /* width:100%; */
-  height:440px;
+  height:80%;
   overflow:auto;
 }
 
@@ -198,4 +209,33 @@
 
 #album_top{
   padding-top:5px;
+}
+
+#settingIcons{
+  margin-top:5%;
+
+}
+
+#settingBtn{
+  background-color:#bdbdbd;
+  font-size : auto;
+}
+
+#bottom_row{
+  height:10px;
+}
+
+#duggy_music_bottom{
+  display : grid;
+  grid-template-rows: 3fr 1fr 1fr;
+}
+
+#bottom_row_center{
+  display : grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+#duggy_music_bottom_info{
+  text-align : center;
+  font-size : 13px;
 }
