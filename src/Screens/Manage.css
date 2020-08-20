@@ -16,7 +16,7 @@ header, main, footer {
 
   .album_title_list{
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.8fr 1fr;
     overflow:auto;
   }
 
