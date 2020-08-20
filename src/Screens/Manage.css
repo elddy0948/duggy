@@ -16,20 +16,14 @@ header, main, footer {
 
   .album_title_list{
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.8fr 1fr;
     overflow:auto;
   }
 
-  .border {
-    border: 2px blue dashed;
+  progress{
+
+    width: 82%;
+    height: 20px;
+
   }
-  
-  .mr-0 {
-    margin-right: 0;
-  }
-  .ml-auto {
-    margin-left:auto;
-  }
-  .d-block {
-    display:block;
-  }
+
