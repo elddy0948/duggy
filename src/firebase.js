@@ -21,7 +21,7 @@ const app = firebase.initializeApp({
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-export var storage = firebase.storage();
+const storage = firebase.storage();
 
 // persistence set session(session, local, none)
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
@@ -34,6 +34,8 @@ export const signInWithGoogle = () => auth.signInWithPopup(provider);
 export const signUpWithFirebase = (userID, userPW) => auth.createUserWithEmailAndPassword(userID, userPW);
 export const signInWithFirebase = (email, password) => auth.signInWithEmailAndPassword(email, password);
   
-export default firebase;
+export {
+  storage, firebase as default
+}
 
 export const imagePath = "gs://duggy-music.appspot.com/Store/2.png";

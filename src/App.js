@@ -202,6 +202,17 @@ class App extends React.Component {
           }
         />
         <Route path="/password_reset" component={Password_reset} />
+        <div id = "duggy_music_bottom">
+          <div id = "bottom_row" />
+          <div id = "bottom_row_center">
+            <div id = "bottom_col"/>
+            <div id = "bottom_col">
+              <div id = "duggy_music_bottom_info">&#169; 2020 Duggy-Music, All rights reserved.</div>
+            </div>
+            <div id = "bottom_col"/>
+            </div>
+          <div id = "bottom_row" />
+        </div>
       </Router>
     );
   }

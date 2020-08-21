@@ -34,7 +34,7 @@ class Admin_Component extends React.Component{
             <li>
                   <li class = "li2" ><a class = "black-text">{displayname}</a>
                     <ul class = "ul2">
-                      <li class = "li2"><a href="/manage" class = "black-text"><i class = "material-icons left">settings</i>Setting</a></li>
+                      <li class = "li2"><a href="/manage" id = "settingBtn"class = "black-text"><i id = "settingIcons"class = "material-icons left">settings</i>Setting</a></li>
                     </ul>
                   </li>
                   <li>
