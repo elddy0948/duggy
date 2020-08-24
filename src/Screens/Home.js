@@ -1,19 +1,24 @@
 import React from "react";
 import youtubeIcon from "../images/Youtubeicon.png";
 import instagramIcon from "../images/Instagramicon.png";
+import cover1 from "../images/cover1.png";
+import cover2 from "../images/cover2.png";
 
 import jQuery from "jquery";
 import $ from "jquery";
 import { black } from "material-ui/styles/colors";
+import { Fade } from "react-slideshow-image";
+import "react-slideshow-image/dist/styles.css";
+
 window.$ = window.jQuery = jQuery;
 
 function Home() {
-
-  $(document).ready(function(){
+  $(document).ready(function () {
     $(".tabs").tabs({
-      swipeable : true
-    })
-  })
+      swipeable: true,
+    });
+  });
+  const images = [cover1, cover2, cover1];
 
   return (
     <>
@@ -34,17 +39,27 @@ function Home() {
             </a>
           </div>
         </div>
-        <div class = "row">
-          <div class = "col s6">
-        <ul id="tabs-swipe-demo" class="tabs">
-    <li class="tab col s3"><a href="#1">Test 1</a></li>
-    <li class="tab col s3"><a href="#2">Test 2</a></li>
-    <li class="tab col s3"><a href="#3">Test 3</a></li>
-  </ul>
-  <div id="1" class="col s1 blue">Test 1</div>
-  <div id="2" class="col s1 red">Test 2</div>
-  <div id="3" class="col s1 green">Test 3</div>
-  </div>
+        <div className="slide-container center-align">
+          <Fade>
+            <div className="each-fade">
+              <div className="image-container">
+                <img src={images[0]} />
+              </div>
+              <h2>First Slide</h2>
+            </div>
+            <div className="each-fade">
+              <div className="image-container">
+                <img src={images[1]} />
+              </div>
+              <h2>Second Slide</h2>
+            </div>
+            <div className="each-fade">
+              <div className="image-container">
+                <img src={images[2]} />
+              </div>
+              <h2>Third Slide</h2>
+            </div>
+          </Fade>
         </div>
       </body>
     </>
