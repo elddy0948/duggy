@@ -4,17 +4,8 @@ import duggyMusic from "./images/DuggyMusic.png";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import {
-  Album,
-  Login,
-  Signup,
-  Store,
-  Home,
-  Manage,
-  Admin_Component,
-  Password_reset,
-  Sheet_list,
-} from "./Screens";
+import { Album, Login, Signup, Store, Home, 
+  Manage, Admin_Component, Password_reset, Sheet_list } from "./Screens";
 
 import "./sass/materialize.scss";
 import "materialize-css/dist/css/materialize.min.css";
@@ -70,13 +61,14 @@ class App extends React.Component {
 
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
-
+   
     // id => # class => .
 
     /* 건드리지마셈 여기
     $("#nav-mobile #li1").hover(function(){{
       $(this).find("#ul1").stop().fadeToggle(300);
     }});
+
     $(document).on("hover", "#nav-mobile #li1", function(){
       $(this).parent().children().removeAttr("style");
       $(this).parent().children().removeClass("active");
@@ -114,54 +106,35 @@ class App extends React.Component {
     return (
       <Router>
         <a href="/">
-          <h2 id="brandLogo" class="center-align">
-            <img src={duggyMusic} />
-          </h2>
-        </a>
-        <nav class="white">
+          <h2 id = "brandLogo" class = "center-align"><img src = {duggyMusic}/></h2></a>
+        <nav class = "white">
           <div>
-            <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>
+              <Link to="/" class="black-text">
+                HOME
+              </Link>
+            </li>
+            <li id="li1">
+              <a class="black-text" href = "/album">ALBUM</a>
+            </li>
+            <li>
+              <Link to="/store" class="black-text">
+                STORE
+              </Link>
+            </li>
+          </ul>
+          
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            {
+              this.state.currentUser ?
+                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
+              :              
               <li>
-                <Link to="/" class="black-text">
-                  HOME
-                </Link>
+               <li><Link to="/login" class="black-text">LOGIN</Link></li>
+               <li><Link to="/signup" class="black-text">SIGNUP</Link></li>
               </li>
-              <li id="li1">
-                <a class="black-text" href="/album">
-                  ALBUM
-                </a>
-              </li>
-              <li>
-                <Link to="/store" class="black-text">
-                  STORE
-                </Link>
-              </li>
-            </ul>
-
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-              {this.state.currentUser ? (
-                <Admin_Component
-                  displayname={this.state.currentUser.displayName}
-                  admintrue={
-                    this.state.currentUser.email === this.state.administrator
-                      ? true
-                      : false
-                  }
-                />
-              ) : (
-                <li>
-                  <li>
-                    <Link to="/login" class="black-text">
-                      LOGIN
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/signup" class="black-text">
-                      SIGNUP
-                    </Link>
-                  </li>
-                </li>
-              )}
+              }
             </ul>
           </div>
         </nav>
@@ -185,18 +158,16 @@ class App extends React.Component {
           }
         />
         <Route path="/password_reset" component={Password_reset} />
-        <div id="duggy_music_bottom">
-          <div id="bottom_row" />
-          <div id="bottom_row_center">
-            <div id="bottom_col" />
-            <div id="bottom_col">
-              <div id="duggy_music_bottom_info">
-                &#169; 2020 Duggy-Music, All rights reserved.
-              </div>
+        <div id = "duggy_music_bottom">
+          <div id = "bottom_row" />
+          <div id = "bottom_row_center">
+            <div id = "bottom_col"/>
+            <div id = "bottom_col">
+              <div id = "duggy_music_bottom_info">&#169; 2020 Duggy-Music, All rights reserved.</div>
             </div>
-            <div id="bottom_col" />
-          </div>
-          <div id="bottom_row" />
+            <div id = "bottom_col"/>
+            </div>
+          <div id = "bottom_row" />
         </div>
       </Router>
     );
