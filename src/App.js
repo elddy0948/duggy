@@ -5,7 +5,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import { Album, Login, Signup, Store, Home, 
-  Manage, Admin_Component, Password_reset, Sheet_list } from "./Screens";
+  Manage, Admin_Component, Password_reset, Sheet_list, Cart } from "./Screens";
 
 import "./sass/materialize.scss";
 import "materialize-css/dist/css/materialize.min.css";
@@ -143,6 +143,7 @@ class App extends React.Component {
         <Route path="/store" component={Store} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path='/cart' component={Cart}/>
         <Route
           path="/manage"
           render={() =>

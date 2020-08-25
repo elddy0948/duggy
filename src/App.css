@@ -239,3 +239,23 @@
   text-align : center;
   font-size : 13px;
 }
+
+#cart_body1{
+  display : grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+#cart_body2{
+  display:grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  margin-top : 30px;
+}
+
+#cart_body_albumlist, #cart_body_scorelist{
+  margin-bottom : 50px;
+}
+
+#cart_albumtitle, #cart_scoretitle, #cart_paytitle{
+  border-bottom : 1px solid grey;
+  padding-bottom : 5px;
+}
