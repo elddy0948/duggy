@@ -32,6 +32,10 @@ class Signup extends React.Component{
       alert('Please enter Nickname address.');
       window.location.reload();
     }
+    if(userName.length === 'administrator'){
+      alert('Cant signup this userName, please enter another userName.');
+      window.location.reload();
+    }
     if (userEmail.length < 4) {
       alert('Please enter an email address.');
       window.location.reload();

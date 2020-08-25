@@ -46,8 +46,9 @@ class Admin_Component extends React.Component{
         else{
           return(
             <li>
-                  <li class = "li2" ><a class = "black_text">{displayname}</a></li>
-                  <li><a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a></li>
+                <li class = "li2"><a class = "black-text" href = "/cart">cart</a></li>
+                <li class = "li2" ><a class = "black-text">{displayname}</a></li>
+                <li><a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a></li>
             </li>
           )
         }
