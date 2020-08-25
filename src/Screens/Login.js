@@ -5,10 +5,11 @@ import "../sass/materialize.scss";
 import "../App.css";
 import styled from 'styled-components';
 
-import firebase, { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import firestore from '../firebase';
+import {firestore} from '../firebase';
+import {auth} from '../firebase';
 
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
@@ -41,26 +42,26 @@ class Login extends React.Component{
         return;
       }
       
-      signInWithFirebase(email, password)
-      .then(()=>{
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        alert(error);
-        return;
-      });
-  
-      // firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      // signInWithFirebase(email, password)
       // .then(()=>{
-      //   signInWithFirebase(email, password)
-      //   .then(()=>{
-      //     this.props.history.push("/");
-      //   })
-      //   .catch(error => {
-      //     alert(error);
-      //     return;
-      //   });
+      //   this.props.history.push("/");
       // })
+      // .catch(error => {
+      //   alert(error);
+      //   return;
+      // });
+  
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(()=>{
+        signInWithFirebase(email, password)
+        .then(()=>{
+          this.props.history.push("/");
+        })
+        .catch(error => {
+          alert(error);
+          return;
+        });
+      })
 
     }
     // document.getElementById('quickstart-sign-in').disabled = true;
@@ -71,6 +72,37 @@ class Login extends React.Component{
     .then(()=>{
       signInWithGoogle()
       .then(()=>{
+
+        // 첫 로그인인 경우 authentication 에는 등록되지만 firestore에는 들어가지 않음
+        // 그러므로 구글로 로그인하는 경우 추가적으로 firestore에 정보를 입력할 필요가 있음
+        var login_check = false;
+        firestore.collection("Users").get()
+        .then(res => {
+          res.forEach(doc => {
+            if(doc.get("Email") === auth.currentUser.email){
+              login_check = true;
+              return true;
+            }
+          })
+
+          if(login_check == false){
+            var store_data = {
+              Email : auth.currentUser.email,
+              authority : [],
+              name : auth.currentUser.displayName
+            };
+
+            firestore.collection("Users").doc().set(store_data)
+            .then( () => {
+              this.props.history.push("/");
+            })
+            .catch( error => {
+              alert(error);
+              return;
+            })
+          }
+        })
+
         this.props.history.push("/");
       })
       .catch(error => {
