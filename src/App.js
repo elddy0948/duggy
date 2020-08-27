@@ -102,10 +102,6 @@ class App extends React.Component {
     });
   };
 
-  checkUser = () => {
-    console.log(auth.currentUser);
-  }
-
   render() {
     return (
       <Router>
@@ -127,7 +123,6 @@ class App extends React.Component {
                 STORE
               </Link>
             </li>
-            <li><button onClick = {this.checkUser}>click</button></li>
           </ul>
           
           <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -181,3 +176,4 @@ class App extends React.Component {
 }
 
 export default App;
+

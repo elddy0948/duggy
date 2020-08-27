@@ -15,6 +15,7 @@ import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
 
 import KaKaoLogin from 'react-kakao-login';
+import Kakao from 'kakaojs';
 
 const url = "https://duggy-music.firebaseio.com";
 
@@ -22,7 +23,16 @@ class Login extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+      kakao : null
+    };
+  }
+
+  componentDidMount(){
+    if(Kakao.Auth == null){
+      Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+    }
+    this.setState({kakao : Kakao});
   }
 
   handler = e => {
@@ -121,21 +131,12 @@ class Login extends React.Component{
     // 4. 사용자의 정보를 성공적으로 받았다면, Firebase Admin SDK 을 이용해서 firebase Auth 에 User을 생성한다
     // 5. 생성된 User의 UID를 통해 Firebase Custom Token을 생성해서 클라이언트에게 반환한다
     // 6. Firebase Auth 에서 제공하는 signinWithcustomtoken 메서드의 인자로 Custom Token을 넘겨 로그인을 처리한다
-  }
 
-  responseGoogle = res => {
-    window.location.href="/";
-  }
-
-  responseKaKao = res => {
-    window.location.href="/";
-  }
-
-  responseError = error => {
-    // alert(error.code);
-    // window.location.reload();
-    alert("google : ", process.env.REACT_APP_API_KEY);
-    alert("kakao : ", process.env.REACT_APP_KAKAO_API_KEY);
+    // this.state.kakao.Auth.login({
+    //   success : (reponse) => {
+    //     alert(response);
+    //   }
+    // })
   }
 
   forget_user_password = () => {
