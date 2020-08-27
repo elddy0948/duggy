@@ -50,7 +50,7 @@ const styles = theme => ({
 
 class Manage_information extends React.Component{
 
-  constructor(props){
+  constructor(props){ 
     super(props);
     this.state = {
       sheet : this.props.desc,
@@ -163,8 +163,7 @@ class Manage_information extends React.Component{
     }
 }
   render(){
-    var s1 = "1s";
-    var s2 ="s";
+   
     if(this.state.sheet_type == "sheet") {
       
       return(
@@ -243,6 +242,29 @@ class Manage extends React.Component{
 
   }
 
+  _alblum_plus(page2, page){
+
+    firestore.collection('SheetList').get()
+    .then(res =>{
+      res.forEach(doc => {
+        var list = doc.get('list');
+        var list2 = doc.get('score_list');
+        list.push(page);
+        list2.push(page2);
+        firestore.collection('SheetList').doc('list').set({
+          list: list,
+          score_list: list2
+        })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
+      })
+    })
+  }
+
   shouldComponentUpdate(nextProps, nextState){
     return nextState.admin_album != this.state.album_album;
   }
@@ -314,13 +336,22 @@ class Manage extends React.Component{
 
   handleSubmit = () => {
 
+    var val = this.state.admin_album.length;
+    var temp = 0;
+    temp = parseInt(val);
+    temp++;
+    val = String(temp);
+    var val2 = val;
+    val = val + "Score";
+    val2 = val2 + "Sheet";
     const information = {
       upload_file_type : this.state.upload_file_type,
       upload_file_name : this.state.upload_file_name,
       upload_file_infor : this.state.upload_file_infor,
     }
     this.handleDialogToggle();
-    if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor && !information.upload_file) return;
+    if(information.upload_file_type == "album") this._alblum_plus(val, val2);
+    else if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor && !information.upload_file) return;
     else if (information.upload_file_type == "song") this._post(information);
     else if(information.upload_file_type == "score");
   }
@@ -417,13 +448,17 @@ class Manage extends React.Component{
                 val={this.props.value}
                 onChange={this.handletypechange}
               >
+                <MenuItem value="album">앨범</MenuItem>
                 <MenuItem value="song">곡</MenuItem>
                 <MenuItem value="score">악보</MenuItem>
               </Select><br /><br />
             </DialogContent>
 
               {
-              
+              (this.state.upload_file_type == "album") ?
+              <div>
+              </div>
+              :
               (this.state.upload_file_type == "song") ?
               <DialogContent className ={classes.scroll}>
               <InputLabel>파일이름</InputLabel>
