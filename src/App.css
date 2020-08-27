@@ -139,30 +139,32 @@
 
 #album_primary_row2{
   display:grid;
-  grid-template-rows: 80px 1fr;
-}
-
-#album_primary_row2_title{
-  display:grid;
-  /* grid-template-columns: 1.1fr 10fr 2fr; */
   grid-template-columns: 1fr 728px 1fr;
 }
 
-#album_primary_row2_discription{
+#album_primary_row2_center{
   display:grid;
-  grid-template-columns: 1fr 8fr 120px 1fr;
+  grid-template-rows : 80px 1fr;
+}
+
+#album_primary_row2_title{
+  border-bottom:1.2px solid #bdbdbd;
 }
 
 #album_primary_songName{
   padding-top:3%;
   padding-bottom:1%;
   font-size:30px;
-  border-bottom:1.2px solid #bdbdbd;
+}
+
+#album_primary_row2_title_bottom{
+  text-align : right;
 }
 
 #album_primary_row2_shopbtn{
-  margin-top:10px;
+  margin:10px;
   font-size:18px;
+  width : auto;
 }
 
 #album_primary_discription{
@@ -175,18 +177,36 @@
   grid-template-columns: 4fr 1fr;
 }
 
+#songNameTitle{
+  display : grid;
+  grid-template-columns: 3fr 1fr;
+  border-bottom:1px solid grey;
+  padding-bottom:1%;
+}
+
+.sheetul{
+  margin:0;
+}
+
+#songNameTitle .sheetul{
+  display:inline-block;
+  /* position: relative; */
+}
+
+#songNameTitle .sheetul .ul{
+  position: absolute;
+  display:none;
+  z-index: 1;
+}
+
 #album_secondary_col{
   display:grid;
   grid-template-columns: 4fr 1fr;
 }
 
-#songNameTitle{
-  border-bottom:1px solid grey;
-  padding-bottom:2%;
-}
-
 #album_songNameList_table{
   /* width:100%; */
+  padding-top : 1%;
   height:80%;
   overflow:auto;
 }
@@ -259,3 +279,5 @@
   border-bottom : 1px solid grey;
   padding-bottom : 5px;
 }
+
+#cartApp{ color : black; }

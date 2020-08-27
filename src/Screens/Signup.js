@@ -54,8 +54,11 @@ class Signup extends React.Component{
       // firestore 에 유저정보 등록하기 collection : Users (Email : userEmail, name : userName, authority(array) : null)
       var store_data = {
         Email : userEmail,
-        authority : [],
-        name : userName
+        name : userName,
+        buy_score : [],
+        buy_sheet : [],
+        cart_score : [],
+        cart_sheet : []
       };
 
       firestore.collection("Users").doc().set(store_data)
