@@ -5,18 +5,19 @@ import "../sass/materialize.scss";
 import "../App.css";
 import styled from 'styled-components';
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
+import firebase from '../firebase';
 import {firestore} from '../firebase';
 import {auth} from '../firebase';
 
 import {signInWithGoogle} from '../firebase';
 import {signInWithFirebase} from '../firebase';
 
-import KaKaoLogin from 'react-kakao-login';
 import kakao from 'kakaojs';
 import kakaobuttonimg from '../images/kakao_login_medium_wide.png';
+
+import jQuery from "jquery";
+import $ from "jquery";
+window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
 
@@ -24,39 +25,87 @@ class Login extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {    };
+    this.state = {
+
+    };
+  }
+
+  componentDidMount(){
+
+    $(document).ready(() =>{
+      window.addEventListener('message', function(e){
+        
+        if(e.origin === 'http://localhost:3001'){
+          if(e.data.logic === true){
+            
+            let token = e.data.firebase_token;
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+                
+                firebase.auth().signInWithCustomToken(token).then(() => {
+
+                  var login_check = false;
+                  firestore.collection("Users").get().then(res => {
+
+                      res.forEach(doc => {
+                        if(doc.get("Email") === auth.currentUser.email){
+                          login_check = true;
+                          return true;
+                        }
+                      })
+
+                      if(login_check === false){
+                        var store_data = {
+                          Email : auth.currentUser.email,
+                          buy_score : [],
+                          buy_sheet : [],
+                          cart_score : [],
+                          cart_sheet : [],
+                          name : auth.currentUser.displayName
+                        };
+
+                        firestore.collection("Users").doc().set(store_data).then( () => {
+                          // this.props.history.push("/");
+                          window.location.href = "/";
+                        })
+                        .catch( error => {
+                          alert(error);
+                          return;
+                        })
+                      }
+
+                  })
+                  .catch(error => {console.log(error); alert(error);})
+                })
+            })
+          }          
+        }
+      })
+    })
   }
 
   handler = e => {
-    if(firebase.auth().currentUser){
-      alert("로그인 세션 유지중 -> 자동 로그아웃");
-      firebase.auth().signOut();
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    if (email.length < 4) {
+      alert('Please enter an email address.');
+      return;
     }
-    else {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
-      if (email.length < 4) {
-        alert('Please enter an email address.');
-        return;
-      }
-      if (password.length < 4) {
-        alert('Please enter a password.');
-        return;
-      }
-      
-      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    if (password.length < 4) {
+      alert('Please enter a password.');
+      return;
+    }
+    
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(()=>{
+      signInWithFirebase(email, password)
       .then(()=>{
-        signInWithFirebase(email, password)
-        .then(()=>{
-          this.props.history.push("/");
-        })
-        .catch(error => {
-          alert(error);
-          return;
-        });
+        this.props.history.push("/");
       })
-      
-    }
+      .catch(error => {
+        alert(error);
+        return;
+      });
+    })    
   }
   
   handler_google = e => {
@@ -65,8 +114,6 @@ class Login extends React.Component{
       signInWithGoogle()
       .then(()=>{
         
-        // 첫 로그인인 경우 authentication 에는 등록되지만 firestore에는 들어가지 않음
-        // 그러므로 구글로 로그인하는 경우 추가적으로 firestore에 정보를 입력할 필요가 있음
         var login_check = false;
         firestore.collection("Users").get()
         .then(res => {
@@ -98,65 +145,25 @@ class Login extends React.Component{
         this.props.history.push("/");
       })
       .catch(error => {
-        // 배포할 때 수정
         alert(error);
         return;
       });
     })
   }
 
-
   responseKaKao = () => {
+    let windowHeight = window.screen.height;
+    let windowWidth = window.screen.width;
+    let popupHeight = 650;
+    let popupWidth = 480;
 
+    let popupH = (windowHeight/2)-(popupHeight/2);
+    let popupW = (windowWidth/2)-(popupWidth/2);
 
-    fetch('http://localhost:3001/login')
-    .then(res => {
-      return res.json();
-    }).then(customtoken => {
-      console.log(typeof(customtoken));
-      console.log(customtoken);
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-        .then(() => {
-          let token = JSON.parse(customtoken);
-          token = token.firebase_token;
-
-          firebase.auth().signInWithCustomToken(token)
-          .then(() => {
-          // 첫 로그인인 경우 authentication 에는 등록되지만 firestore에는 들어가지 않음
-          // 그러므로 카카오로 로그인하는 경우 추가적으로 firestore에 정보를 입력할 필요가 있음
-          var login_check = false;
-          firestore.collection("Users").get()
-          .then(res => {
-            res.forEach(doc => {
-              if(doc.get("Email") === auth.currentUser.email){
-                login_check = true;
-                return true;
-              }
-            })
-            
-            if(login_check == false){
-              var store_data = {
-                Email : auth.currentUser.email,
-                authority : [],
-                name : auth.currentUser.displayName
-              };
-
-              firestore.collection("Users").doc().set(store_data)
-              .then( () => {
-                this.props.history.push("/");
-              })
-              .catch( error => {
-                alert(error);
-                return;
-              })
-            }
-          })
-
-          this.props.history.push("/");          
-          })
-        })
-      })
-    }
+    let kakao_restapi = 'height = '+popupHeight+', width = '+popupWidth+', top = '+popupH+', left = '+popupW;
+    window.open("https://kauth.kakao.com/oauth/authorize?client_id=9084ec318708cfb4deb6b4975d5865da&redirect_uri=http://localhost:3001/login&response_type=code",
+    'SignIn with KaKao', kakao_restapi);
+  }
 
   forget_user_password = () => {
     this.props.history.push("/password_reset");
@@ -175,7 +182,6 @@ class Login extends React.Component{
                 <div class="input-field col s6">
                   <label for = "email">UserEmail</label>
                   <input 
-                    // placeholder="example@google.com" 
                     id="email" 
                     type="email"
                     class="validate"
@@ -188,8 +194,7 @@ class Login extends React.Component{
                 <div class="col s3" />
                 <div class="input-field col s6">
                   <label for = "password">password</label>
-                  <input 
-                    // placeholder="Password" 
+                  <input
                     id="password"
                     type="password" 
                     class="validate"
@@ -222,13 +227,7 @@ class Login extends React.Component{
             <div class="row">
                 <div class="col s4"/>
                 <div class="col s4">
-                {/* <KaKaoButton
-                    jsKey={process.env.REACT_APP_KAKAO_API_KEY}
-                    buttonText = "sign in with KaKao"
-                    // onClick = {this.handler_kakao}
-                    onSuccess = {this.responseKaKao}
-                    /> */}
-                  <a onClick = {this.responseKaKao} href = {"https://kauth.kakao.com/oauth/authorize?client_id=9084ec318708cfb4deb6b4975d5865da&redirect_uri=http://localhost:3001/login&response_type=code"}>
+                  <a id = "kakaologincheck" onClick = {this.responseKaKao}>
                     <img id = "kakaologinbtn" src = {kakaobuttonimg}/>
                   </a>
                 </div>
@@ -241,23 +240,5 @@ class Login extends React.Component{
     );
   }
 }
-
-const KaKaoButton = styled(KaKaoLogin)`
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  line-height: 44px;
-  color: #783c00;
-  background-color: #FFEB00;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-  $:hover{
-    box-shadow: 0 0px 15px 0 rgba(0,0,0,0.2)
-  }
-`
 
 export default Login;
