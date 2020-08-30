@@ -235,8 +235,8 @@ class Album_XSheet extends React.Component{
                         <div id = "album_primary_songName">{this.state.songName}</div>
                         </div>
                         <div id = "album_primary_row2_title_bottom">
-                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_sheet}><i class = "material-icons left">shopping_cart</i>음원 담기</button>
-                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_score}><i class = "material-icons left">shopping_cart</i>악보 담기</button>
+                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_sheet}><i class = "material-icons left">shopping_cart</i>음원/700￦</button>
+                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_score}><i class = "material-icons left">shopping_cart</i>악보/2000￦</button>
                         </div>
                       </div>
                       <div id = "album_primary_row_div"/>
