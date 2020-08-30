@@ -104,9 +104,12 @@ class App extends React.Component {
 
   render() {
     return (
+
       <Router>
         <a href="/">
-          <h2 id = "brandLogo" class = "center-align"><img src = {duggyMusic}/></h2></a>
+          <h2 id = "brandLogo" class = "center-align"><img src = {duggyMusic}/></h2>
+        </a>
+        
         <nav class = "white">
           <div>
           <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -134,31 +137,22 @@ class App extends React.Component {
                <li><Link to="/login" class="black-text">LOGIN</Link></li>
                <li><Link to="/signup" class="black-text">SIGNUP</Link></li>
               </li>
-              }
+            }
             </ul>
           </div>
         </nav>
+
         <Route exact path="/" component={Home} />
         <Route path="/album" component={Album} />
         <Route path="/store" component={Store} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path='/cart' component={Cart}/>
-        <Route
-          path="/manage"
-          render={() =>
-            this.state.currentUser ? (
-              this.state.currentUser.email === this.state.administrator ? (
-                <Manage />
-              ) : (
-                <Home />
-              )
-            ) : (
-              <Home />
-            )
-          }
-        />
-        <Route path="/password_reset" component={Password_reset} />
+        <Route path="/login" render={() => this.state.currentUser ? <Home /> : <Login />}/>
+        <Route path="/signup" render={() => this.state.currentUser ? <Home /> : <Signup />}/>
+        <Route path='/cart' render={() => this.state.currentUser ? <Cart /> : <Home /> } />
+        <Route path="/manage" 
+        render={() => this.state.currentUser ? 
+                      this.state.currentUser.email === this.state.administrator ? <Manage /> : <Home /> : <Home />}/>
+        <Route path = "/password_reset" render = {() => this.state.currentUser ? <Home /> : <Password_reset /> } />
+        
         <div id = "duggy_music_bottom">
           <div id = "bottom_row" />
           <div id = "bottom_row_center">
@@ -170,10 +164,10 @@ class App extends React.Component {
             </div>
           <div id = "bottom_row" />
         </div>
+
       </Router>
     );
   }
 }
 
 export default App;
-
