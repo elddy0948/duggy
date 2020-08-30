@@ -3,14 +3,14 @@ import ReactDom from "react-dom";
 
 import "../sass/materialize.scss";
 import "../App.css";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 import firebase from '../firebase';
 import {firestore} from '../firebase';
 import {auth} from '../firebase';
 
-import {signInWithGoogle} from '../firebase';
-import {signInWithFirebase} from '../firebase';
+import { signInWithGoogle } from "../firebase";
+import { signInWithFirebase } from "../firebase";
 
 import kakao from 'kakaojs';
 import kakaobuttonimg from '../images/kakao_login_medium_wide.png';
@@ -21,9 +21,8 @@ window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
 
-class Login extends React.Component{
-
-  constructor(props){
+class Login extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
 
@@ -148,8 +147,7 @@ class Login extends React.Component{
         alert(error);
         return;
       });
-    })
-  }
+  };
 
   responseKaKao = () => {
     let windowHeight = window.screen.height;
@@ -167,14 +165,28 @@ class Login extends React.Component{
 
   forget_user_password = () => {
     this.props.history.push("/password_reset");
-  }
-  
-  render(){
+  };
+
+  render() {
     return (
-      <body id = "login_body">
+      <body id="login_body">
         <div class="container">
-          <div class="row"/>
+          <div class="row" />
           <div class="row">
+            <h4 id="signinTitle">Sign In</h4>
+            <div class="row">
+              <div class="col s3" />
+              <div class="input-field col s6">
+                <label for="email">UserEmail</label>
+                <input
+                  // placeholder="example@google.com"
+                  id="email"
+                  type="email"
+                  class="validate"
+                />
+              </div>
+              <div class="col s3" />
+            </div>
 
           <h4 id = "signinTitle">Sign In</h4>
               <div class="row">
@@ -203,25 +215,21 @@ class Login extends React.Component{
                 </div>
                 <div class="col s3" />
               </div>
-              
-              <div class="row">
-                <div class="col s4" />
-                <div class="col s4">
-                  <button
-                    class="waves-effect waves-light btn-large col s12"
-                    onClick = {this.handler} > Sign In </button>
-                </div>
-                <div class="col s4" />
-              </div>
+              <div class="col s4" />
+            </div>
 
             <div class="row">
-                <div class="col s4"/>
-                <div class="col s4">
+              <div class="col s4" />
+              <div class="col s4">
                 <button
-                    class="waves-effect waves-light btn-large col s12"
-                    onClick = {this.handler_google} > sign in with Google </button>
-                </div>
-                <div class="col s4"/>
+                  class="waves-effect waves-light btn-large col s12"
+                  onClick={this.handler_google}
+                >
+                  {" "}
+                  sign in with Google{" "}
+                </button>
+              </div>
+              <div class="col s4" />
             </div>
 
             <div class="row">
@@ -233,7 +241,6 @@ class Login extends React.Component{
                 </div>
                 <div class="col s4"/>
             </div>
-
           </div>
         </div>
       </body>

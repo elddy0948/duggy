@@ -5,9 +5,9 @@ import "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
-const url = 'https://duggy-music.firebaseio.com/';
+const url = "https://duggy-music.firebaseio.com/";
 
-const app = firebase.initializeApp({
+export const app = firebase.initializeApp({
   // firebaseConfig
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "duggy-music.firebaseapp.com",
@@ -31,11 +31,11 @@ const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
-export const signUpWithFirebase = (userID, userPW) => auth.createUserWithEmailAndPassword(userID, userPW);
-export const signInWithFirebase = (email, password) => auth.signInWithEmailAndPassword(email, password);
-  
-export {
-  storage, firebase as default
-}
+export const signUpWithFirebase = (userID, userPW) =>
+  auth.createUserWithEmailAndPassword(userID, userPW);
+export const signInWithFirebase = (email, password) =>
+  auth.signInWithEmailAndPassword(email, password);
+
+export { storage, firebase as default };
 
 export const imagePath = "gs://duggy-music.appspot.com/Store/2.png";
