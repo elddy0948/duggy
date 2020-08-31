@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import "../sass/materialize.scss";
 import { firestore, auth } from "../firebase";
-import { makeArray } from "jquery";
+
+// TODO
+// 1. 장바구니 삭제 구현
+// 2. 총 금액 계산
+// 3. 구매버튼 구현
 
 const Cart = () => {
-  const [userEmail, setUserEmail] = useState("");
   const [scores, setScores] = useState([]);
   const [sheets, setSheets] = useState([]);
 
@@ -14,70 +17,83 @@ const Cart = () => {
 
   // mount될 때 한번만 실행하고 싶을 때 ==> []
   // 특정 값이 변경될 때 실행 ==> [특정 값]
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        //User is signed in.
-        setUserEmail(user.email);
-        console.log("User Signed In");
-        firestore.collection("Users").onSnapshot((doc) => {
-          doc.forEach((field) => {
-            if (field.get("Email") === user.email) {
-              field.get("cart_score").forEach((score) => {
-                setScores((scores) => [
-                  ...scores,
-                  <tr>
-                    <td>{score}</td>
-                    <td>2000원</td>
-                    <td>
-                      <button>삭제</button>
-                    </td>
-                  </tr>,
-                ]);
-              });
-              field.get("cart_sheet").forEach((sheet) => {
-                setSheets((sheets) => [
-                  ...sheets,
-                  <tr>
-                    <td>{sheet}</td>
-                    <td>1000원</td>
-                    <td>
-                      <button>삭제</button>
-                    </td>
-                  </tr>,
-                ]);
-              });
-            }
-          });
+  const bringScore = () => {
+    const items = [];
+    firestore
+      .collection("Users")
+      .get()
+      .then((doc) => {
+        doc.forEach((field) => {
+          if (field.get("Email") === auth.currentUser.email) {
+            field.get("cart_score").forEach((score) => {
+              items.push(score);
+            });
+          }
         });
-      } else {
-        //No user is signed in.
-        console.log("No User Signed In");
-      }
-    });
+        setScores(items);
+      });
+  };
+
+  const bringSheet = () => {
+    const items = [];
+    firestore
+      .collection("Users")
+      .get()
+      .then((doc) => {
+        doc.forEach((field) => {
+          if (field.get("Email") === auth.currentUser.email) {
+            field.get("cart_sheet").forEach((sheet) => {
+              items.push(sheet);
+            });
+          }
+        });
+        setSheets(items);
+      });
+  };
+
+  useEffect(() => {
+    bringScore();
   }, []);
 
-  const returnScore = () => {
-    return scores.map((score) => (
-      <tr>
-        <td>{score}</td>
-        <td>2000원</td>
-        <td>
-          <button>삭제</button>
-        </td>
-      </tr>
-    ));
+  useEffect(() => {
+    bringSheet();
+  }, []);
+
+  const removeScore = (item) => {
+    const items = scores.filter((score) => score != item);
+
+    firestore
+      .collection("Users")
+      .get()
+      .then((doc) => {
+        doc.forEach((field) => {
+          if (field.get("Email") === auth.currentUser.email) {
+            firestore
+              .collection("Users")
+              .doc(field.id)
+              .update({ cart_score: items });
+          }
+        });
+      });
+    return setScores(items);
   };
-  const returnSheet = () => {
-    return sheets.map((sheet) => (
-      <tr>
-        <td>{sheet}</td>
-        <td>1000원</td>
-        <td>
-          <button>삭제</button>
-        </td>
-      </tr>
-    ));
+
+  const removeSheet = (item) => {
+    const items = sheets.filter((sheet) => sheet != item);
+    firestore
+      .collection("Users")
+      .get()
+      .then((doc) => {
+        doc.forEach((field) => {
+          if (field.get("Email") === auth.currentUser.email) {
+            firestore
+              .collection("Users")
+              .doc(field.id)
+              .update({ cart_sheet: items });
+          }
+        });
+      });
+    return setSheets(items);
   };
 
   return (
@@ -95,7 +111,21 @@ const Cart = () => {
             </thead>
             <tbody>
               {scores.map((score) => {
-                return score;
+                return (
+                  <tr>
+                    <td>{score}</td>
+                    <td>2,000원</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          removeScore(score);
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                );
               })}
             </tbody>
           </table>
@@ -112,7 +142,21 @@ const Cart = () => {
             </thead>
             <tbody>
               {sheets.map((sheet) => {
-                return sheet;
+                return (
+                  <tr>
+                    <td>{sheet}</td>
+                    <td>1,000원</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          removeSheet(sheet);
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                );
               })}
             </tbody>
           </table>
