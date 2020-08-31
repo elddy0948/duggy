@@ -1,16 +1,17 @@
 <!DOCTYPE html>
     <script>
         let token = <%-JSON.stringify(firebase_token)%>; // 받은 데이터는 <%- %> 으로 확인
+        let atoken = <%-JSON.stringify(kakao_accesstoken)%>;
         console.log(token);
         if(token === null){
             // use : targetWindow.postMessage(message, targetOrigin, [transfer])
             alert("로그인에 실패하였습니다.");
-            window.opener.postMessage({logic : false, firebase_token : null}, 'http://localhost:3000');
+            window.opener.postMessage({logic : false}, 'http://localhost:3000');
             self.close();
         }
         else{
             alert("로그인에 성공하였습니다.");
-            window.opener.postMessage({logic : true, firebase_token : token}, 'http://localhost:3000');
+            window.opener.postMessage({logic : true, firebase_token : token, kakao_accesstoken : atoken}, 'http://localhost:3000');
             self.close();
         }
     </script>
