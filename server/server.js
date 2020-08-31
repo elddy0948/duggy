@@ -98,6 +98,15 @@ function requestAccessToken(AccessForCode){
     });
 }
 
+function requestLogoutKaKao(token){
+  console.log(token+"으로 로그아웃 시도합니다");
+  return request({
+    method : 'POST',
+    headers : {'Authorization' : 'Bearer '+token},
+    url : 'https://kapi.kakao.com/v1/user/logout'
+  })
+}
+
 // create an express app and use json body parser
 const app = express();
 var path = require('path');
@@ -109,7 +118,6 @@ app.use(cors());
 // default root url to test if the server is up
 app.get('/', (req, res) => res.status(200)
 .send('KakaoLoginServer for Firebase is up and running!'));
-
 
 // actual endpoint that creates a firebase token with Kakao access token
 app.all('/login', (req, res) => {
@@ -128,10 +136,20 @@ app.all('/login', (req, res) => {
         console.log(`Access_token : ${accesstoken}`);
         createFirebaseToken(accesstoken).then((firebaseToken) => {
             console.log(`Returning firebase token to user: ${firebaseToken}`);
-            res.render('kakaoLogin', {firebase_token : firebaseToken});
+            res.render('kakaoLogin', {firebase_token : firebaseToken, kakao_accesstoken : accesstoken});
         });
     })
 });
+
+app.all('/logout', (req, res) => {
+  console.log('--------- Finish KaKao web session exit ---------');
+  let token = req.query.state;
+  console.log('--------- KaKao Logout ----------');
+  requestLogoutKaKao(token).then(() => {
+    console.log('------------ Finish Kakao Logout ------------');
+    res.status(200).send();
+  })
+})
 
 // Start the server
 const server = app.listen(3001, () => {

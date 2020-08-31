@@ -11,6 +11,9 @@ import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Kakao from 'kakaojs';
+
+
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -32,6 +35,7 @@ class Admin_Component extends React.Component{
     }
 
     componentDidMount(){
+      Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
 
       if(auth.currentUser !== null){
         firestore.collection("Users").get().then(res => {
@@ -55,9 +59,41 @@ class Admin_Component extends React.Component{
     }
 
     handler_signOut = () => {
-        auth.signOut().then(()=>{
-          window.location.href = "/";
-        });
+
+        // if signout, check user provider
+        let provider = auth.currentUser.uid;
+        provider = provider.substring(0,6);
+        if(provider === 'kakao:'){
+          // kakao session logout 실행
+          // kakao accesstoken 값이 필요함
+          let accesstoken;
+          firestore.collection("Users").get().then(res => {
+            res.forEach(doc => {
+              if(doc.get("Email") === auth.currentUser.email){
+                accesstoken = doc.get('access_token');
+                // accesstoken 가지고옴
+
+                // 카카오 계정 로그아웃, 로그아웃API 실행
+                fetch(`https://kauth.kakao.com/oauth/logout?client_id=9084ec318708cfb4deb6b4975d5865da&logout_redirect_uri=http://localhost:3001/logout&state=${accesstoken}`,{
+                  method : 'GET',
+                }).then(() => {
+                  auth.signOut().then(()=>{
+                    Kakao.Auth.logout();
+                    window.location.href = "/";
+                  });
+                }).catch(error => {
+                  alert(error);
+                  return;
+                })
+              }
+            })
+          })
+        }
+        else{
+          auth.signOut().then(()=>{
+            window.location.href = "/";
+          });
+        }
       }
 
     render(){
