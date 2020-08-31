@@ -33,6 +33,7 @@ class Login extends React.Component {
         if (e.origin === "http://localhost:3001") {
           if (e.data.logic === true) {
             let token = e.data.firebase_token;
+            let accesstoken = e.data.kakao_accesstoken;
             firebase
               .auth()
               .setPersistence(firebase.auth.Auth.Persistence.SESSION)
@@ -45,8 +46,8 @@ class Login extends React.Component {
                     firestore
                       .collection("Users")
                       .get()
-                      .then((res) => {
-                        res.forEach((doc) => {
+                      .then(res => {
+                        res.forEach(doc => {
                           if (doc.get("Email") === auth.currentUser.email) {
                             login_check = true;
                             return true;
@@ -61,6 +62,7 @@ class Login extends React.Component {
                             cart_score: [],
                             cart_sheet: [],
                             name: auth.currentUser.displayName,
+                            access_token : accesstoken
                           };
 
                           firestore
@@ -72,13 +74,29 @@ class Login extends React.Component {
                               window.location.href = "/";
                             })
                             .catch((error) => {
+                              console.log("여기?");
                               alert(error);
                               return;
                             });
                         }
+                        else{
+                          firestore.collection("Users").get().then(res => {
+                            res.forEach(doc => {
+                              if(doc.get("Email") === auth.currentUser.email){
+                                firestore.collection("Users").doc(doc.id).update({
+                                  access_token : accesstoken
+                                })
+                                .then(() => {
+                                  window.location.href = "/";
+                                })
+                              }
+                            })
+                          })
+                        }
+
                       })
                       .catch((error) => {
-                        console.log(error);
+                        console.log("여기?..");
                         alert(error);
                       });
                   });
@@ -107,7 +125,8 @@ class Login extends React.Component {
       .then(() => {
         signInWithFirebase(email, password)
           .then(() => {
-            this.props.history.push("/");
+            // this.props.history.push("/");
+            window.location.href = "/";
           })
           .catch((error) => {
             alert(error);
@@ -147,7 +166,8 @@ class Login extends React.Component {
                     .doc()
                     .set(store_data)
                     .then(() => {
-                      this.props.history.push("/");
+                      // this.props.history.push("/");
+                      window.location.href = "/";
                     })
                     .catch((error) => {
                       alert(error);
@@ -155,8 +175,8 @@ class Login extends React.Component {
                     });
                 }
               });
-
-            this.props.history.push("/");
+              window.location.href = "/";
+            // this.props.history.push("/");
           })
           .catch((error) => {
             alert(error);
@@ -184,7 +204,7 @@ class Login extends React.Component {
       ", left = " +
       popupW;
     window.open(
-      "https://kauth.kakao.com/oauth/authorize?client_id=9084ec318708cfb4deb6b4975d5865da&redirect_uri=http://localhost:3001/login&response_type=code",
+      "https://kauth.kakao.com/oauth/authorize?client_id=9084ec318708cfb4deb6b4975d5865da&redirect_uri=http://localhost:3001/login&response_type=code&auth_type=reauthenticate",
       "SignIn with KaKao",
       kakao_restapi
     );
