@@ -13,14 +13,14 @@
     "cors": "^2.8.5",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "firebase": "^7.18.0",
+    "firebase": "^7.19.1",
     "firebase-admin": "^9.1.1",
     "fund": "^1.0.0",
     "http-proxy-middleware": "^1.0.5",
     "jquery": "^3.5.1",
     "kakaojs": "^1.2.0",
     "material-ui": "^0.20.2",
-    "materialize-css": "^1.0.0-rc.2",
+    "materialize-css": "^1.0.0",
     "mongojs": "^3.1.0",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
@@ -33,12 +33,13 @@
     "react-kakao-login": "^1.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
-    "react-slideshow-image": "^3.1.0",
+    "react-slideshow-image": "^3.2.0",
     "react-string-replace": "^0.4.4",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "styled-components": "^5.1.1",
-    "yarn": "^1.22.4"
+    "webpack": "^4.19.1",
+    "yarn": "^1.22.5"
   },
   "scripts": {
     "storybook": "start-storybook -p 9001 -c .storybook",
@@ -66,7 +67,7 @@
     ]
   },
   "devDependencies": {
-    "@storybook/react": "^5.3.19",
+    "@storybook/react": "^5.3.21",
     "node-sass": "^4.14.1"
   }
 }
