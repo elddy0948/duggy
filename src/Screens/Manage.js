@@ -25,6 +25,7 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ThemeConsumer } from "styled-components";
 import M from 'materialize-css';
+import { AvSubscriptions } from "material-ui/svg-icons";
 window.$ = window.jQuery = jQuery;
 
 const url = "https://duggy-music.firebaseio.com";
@@ -59,14 +60,27 @@ class Manage_information extends React.Component{
       songName : null,
       songUrl : null,
       songId : null,
-      discription : 'Write discription this music!'
+      discription : 'Write discription this music!',
+
+      have_score: null,
+      scoreNameList: [],
+      scoreName : null,
+      scoreId :  null,
     };
   }
 
   _delete(id){
-    console.log(this.state.songNameList);
     var i;
     var delete_id;
+
+    var page_num = this.state.sheet.substr(0,1);
+    var music_page = page_num + "Sheet";
+    var score_page = page_num + "Score";
+
+    var check = "false";
+    var doc_id;
+    var name;
+    var urls;
     
     firestore.collection(this.state.sheet).get()
     .then(res => {
@@ -74,8 +88,52 @@ class Manage_information extends React.Component{
         if(doc.get('songName') === id){
           firestore.collection(this.state.sheet).doc(doc.id).delete()
           .then(()=>{
+            
+            if(this.state.sheet_type == "score"){
+
+              firestore.collection(music_page).get()
+              .then(res => {
+                res.forEach(doc => {
+          
+                  var stand = doc.get('songName');
+          
+                  if(stand == id){
+                    check = "true";
+                    doc_id = doc.id;
+                    name = stand;
+                    urls = doc.get('youtubeURL');
+                  }
+          
+                })
+          
+                if(check == "false"){
+                  alert("음원이 존재하지 않습니다.");
+                  window.location.reload();
+                }
+
+                else {
+
+                  firestore.collection(music_page).doc(doc_id).update({
+                    haveScore: "false",
+                    songName: name,
+                    youtubeURL: urls,
+                  })
+                  .then(() => {
+                    alert("삭제완료");
+                    window.location.reload(); 
+                  })
+                  .catch(function(error) {
+                    console.error("Error writing document: ", error);
+                  });
+          
+                }
+              })
+              .catch(error => {
+                console.log(error);
+              })
+            }
             alert("삭제완료");
-            window.location.reload();
+            window.location.reload(); 
           })
           .catch(error => {
             alert("삭제실패"+error);
@@ -99,44 +157,36 @@ class Manage_information extends React.Component{
     
   }
 
+  _filedelete2(id){
+
+    console.log(id);
+    var desertRef = storage.ref(`Score/${id + ".pdf"}`);
+    desertRef.delete().then(function() {
+    }).catch(function(error) {
+    });
+    
+  }
+
   handleDelete(id){
     this._delete(id);
-    this._filedelete(id);
+    if(this.state.sheet_type == "sheet") this._filedelete(id);
+    else if(this.state.sheet_type == "score") this._filedelete2(id);
   }
 
   componentDidMount(){
 
-    firestore.collection(this.state.sheet).get().then(res => {
-
-      var doclist = [];
-      var doclist2 = [];
-      var list = [];
-      var idList = [];
-  
-      res.forEach(doc => {
-        let songname = doc.get('songName');
-        let songurl = '';
-        songurl += doc.get('youtubeURL');
-        let real_songurl = songurl.replace("watch?v=", "embed/");
-  
-        doclist.push(songname);
-        doclist2.push(real_songurl);
-        idList.push(doc.id);
-        list.push(
-        <li key = {songname}><ul id = "songName"><Grid item xs={8} container alignItems="flex-start" justify="flex-end" direction="row">
-        {songname}&nbsp;&nbsp;&nbsp;<Button size="small"  variant="contained" color="secondary" onClick={() => this.handleDelete(songname)}>삭제
-        </Button></Grid></ul></li>)
-      })
-      this.setState({songNameList:list});
-      this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
-    })
 
   }
 
   componentDidUpdate(prevProps, prevState){
+
     if(this.props.desc !== prevProps.desc){
-        this.setState({sheet:this.props.desc});
-        this.setState({sheet_type: this.props.type_val});
+
+      this.setState({sheet:this.props.desc});
+      this.setState({sheet_type: this.props.type_val});
+
+      if(this.props.type_val == "sheet"){
+
         firestore.collection(this.props.desc).get().then(res => {
 
             var doclist = [];
@@ -160,6 +210,32 @@ class Manage_information extends React.Component{
             this.setState({songNameList:list});
             this.setState({songName:doclist[0], songUrl : doclist2[0], songId : idList});
           })
+
+        }
+
+      else if(this.props.type_val == "score") {
+
+        firestore.collection(this.props.desc).get().then(res => {
+
+          var doclist = [];
+          var list = [];
+          var idList = [];
+      
+          res.forEach(doc => {
+            let songname = doc.get('songName');
+      
+            doclist.push(songname);
+            idList.push(doc.id);
+            list.push(
+            <li key = {songname}><ul id = "songName"><Grid item xs={8} >
+            {songname}&nbsp;&nbsp;&nbsp;<Button size="small" variant="contained" color="secondary" onClick={() => this.handleDelete(songname)}>삭제</Button></Grid></ul></li>)
+          })
+          this.setState({scoreNameList:list});
+          this.setState({scoreName:doclist[0], scoreId : idList});
+        })
+
+      }
+
     }
 }
   render(){
@@ -180,7 +256,7 @@ class Manage_information extends React.Component{
       return(
 
       <ul class = "album_title_list" width = "100">
-         score
+        {this.state.scoreNameList}
       </ul>
  
       );
@@ -230,6 +306,7 @@ class Manage extends React.Component{
   _post(information) {
 
     firestore.collection(this.state.sheet).doc().set({
+      haveScore: "false",
       songName: information.upload_file_name,
       youtubeURL: information.upload_file_infor,
     })
@@ -239,6 +316,77 @@ class Manage extends React.Component{
     .catch(function(error) {
       console.error("Error writing document: ", error);
     });
+
+  }
+
+  _score_post(information){
+
+    var page_num = this.state.sheet.substr(0,1);
+    console.log(page_num);  
+    var music_page = page_num + "Sheet";
+    var score_page = page_num + "Score";
+
+    var check = "false";
+    var doc_id;
+    var name;
+    var urls;
+    
+    firestore.collection(music_page).get()
+    .then(res => {
+      res.forEach(doc => {
+
+        var stand = doc.get('songName');
+
+        if(stand == information.upload_file_name){
+          check = "true";
+          doc_id = doc.id;
+          console.log(doc_id);
+          name = stand;
+          urls = doc.get('youtubeURL');
+        }
+
+      })
+
+      if(check == "false"){
+        alert("음원이 존재하지 않습니다.");
+        window.location.reload();
+      }
+
+      else {
+
+        firestore.collection(music_page).doc(doc_id).update({
+          haveScore: "true",
+          songName: name,
+          youtubeURL: urls,
+        })
+        .then(() => {
+    
+
+          firestore.collection(score_page).doc().set({
+            songName: information.upload_file_name,
+          })
+          .then(() => {
+            alert("등록 성공");
+            window.location.reload();
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+          });
+
+          
+        })
+        .catch(function(error) {
+          console.error("Error writing document: ", error);
+        });
+
+      }
+
+
+    })
+    .catch(error => {
+      console.log(error);
+    })
+
 
   }
 
@@ -351,9 +499,12 @@ class Manage extends React.Component{
     }
     this.handleDialogToggle();
     if(information.upload_file_type == "album") this._alblum_plus(val, val2);
-    else if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor && !information.upload_file) return;
+    else if(!information.upload_file_name && !information.upload_file_type && !information.upload_file_infor && !information.upload_file) {
+      alert("모든정보를 기입해주시기 바랍니다."); 
+      return;
+    }
     else if (information.upload_file_type == "song") this._post(information);
-    else if(information.upload_file_type == "score");
+    else if(information.upload_file_type == "score") this._score_post(information);
   }
 
   handleUploadChange = e => {
@@ -369,6 +520,13 @@ class Manage extends React.Component{
 
     const {up_file} = this.state;
     console.log(up_file);
+    console.log(this.state.upload_file_name);
+    console.log(this.state.sheet);
+
+    var file_name = this.state.upload_file_name + ".mp3";
+
+    if(file_name == up_file.name){
+
     const uploadTask = storage.ref(`Music/${up_file.name}`).put(up_file);
     uploadTask.on(
       "state_changed",
@@ -396,6 +554,58 @@ class Manage extends React.Component{
 
       }
     )
+
+    }
+
+    else {
+      alert("업로드 파일명과 파일이름이 일치하지 않습니다.");
+      window.location.reload();
+    }
+  }
+  
+
+  handleUploadScore = e => {
+
+    const {up_file} = this.state;
+    console.log(up_file);
+
+    var file_name = this.state.upload_file_name + ".pdf";
+
+    if(file_name == up_file.name){
+
+    const uploadTask = storage.ref(`Score/${up_file.name}`).put(up_file);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        if(progress == 100) {
+          this.setState({B_C2: "secondary"});
+          this.setState({progress});
+        }
+        this.setState({progress});
+      },
+      error =>{
+        console.log(error);
+      },
+      () => {
+        storage.ref('Score')
+        .child(up_file.name)
+        .getDownloadURL()
+        .then(url => {
+            this.setState({B_C: "primary"});
+            console.log(url);
+            console.log("success");
+            this.setState({up_file: ''});
+        });
+
+      }
+    )
+    }
+
+    else {
+      alert("업로드 파일명과 파일이름이 일치하지 않습니다.");
+      window.location.reload();
+    }
   }
 
   render(){
@@ -465,7 +675,7 @@ class Manage extends React.Component{
               <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
               <InputLabel>URL</InputLabel>
               <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
-
+              <InputLabel>음원 업로드</InputLabel><br/>
               <div className={classes.root}>
               <progress value ={this.state.progress} max = "100" /> <br/>
                <input
@@ -490,7 +700,7 @@ class Manage extends React.Component{
               <TextField autofocus type ="text" name="upload_file_name" value={this.state.upload_file_name} onChange={this.handleValueChange} /><br /><br />
               <InputLabel>기타정보</InputLabel>
               <TextField autofocus type ="text" name="upload_file_infor" value={this.state.upload_file_infor} onChange={this.handleValueChange} /><br /><br />
-
+              <InputLabel>악보 업로드</InputLabel><br/>
               <div className={classes.root}>
               <progress value ={this.state.progress} max = "100" /> <br/>
                <input
@@ -504,7 +714,7 @@ class Manage extends React.Component{
                 <label htmlFor="contained-button-file" >
                 <Button variant="contained" color="primary" component="span"> Choose </Button>
                 </label>
-                <Button variant="contained" color={this.state.B_C} component="span" onClick = {this.handleUpload}> Upload </Button>
+                <Button variant="contained" color={this.state.B_C} component="span" onClick = {this.handleUploadScore}> Upload </Button>
               </div>
               </DialogContent>
               :
