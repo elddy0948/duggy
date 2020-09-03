@@ -119,18 +119,18 @@ class App extends React.Component {
     return (
       <Router>
         <a href="/">
-          <h2 id="brandLogo" class="center-align">
+          <h2 id="brandLogo" className="center-align">
             <img src={duggyMusic} />
           </h2>
         </a>
 
-        <nav class="white">
-          <div class="nav-wrapper">
-            <a class="black-text brand-logo center" href="/album">
+        <nav className="white">
+          <div className="nav-wrapper">
+            <a className="black-text brand-logo center" href="/album">
               <img src={albumsLogo} />
             </a>
 
-            <ul id="nav-mobile" class="right">
+            <ul id="nav-mobile" className="right">
               {this.state.currentUser ? (
                 <Admin_Component
                   displayname={this.state.currentUser.displayName}
@@ -142,16 +142,18 @@ class App extends React.Component {
                 />
               ) : (
                 <li>
+                  <ul>
                   <li>
-                    <Link to="/login" class="black-text">
+                    <Link to="/login" className="black-text">
                       LOGIN
                     </Link>
                   </li>
                   <li>
-                    <Link to="/signup" class="black-text">
+                    <Link to="/signup" className="black-text">
                       SIGNUP
                     </Link>
                   </li>
+                  </ul>
                 </li>
               )}
             </ul>

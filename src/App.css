@@ -88,20 +88,6 @@
   padding-bottom:5%;
 }
 
-/*APP 드롭다운*/
-
-/* 절대 건드리지마세요
-#nav-mobile #li1{
-  display:inline-block;
-  position: relative;
-}
-
-#nav-mobile #li1 #ul1{
-  position: absolute;
-  display:none;
-  background-color: #e57373;
-} */
-
 #nav-mobile .li2{
   display:inline-block;
   position: relative;

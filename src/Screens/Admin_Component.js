@@ -101,23 +101,23 @@ class Admin_Component extends React.Component{
         var admin_check = this.props.admintrue;
         if(admin_check){
           return(
-            <li>
-                  <li class = "li2" ><a class = "black-text">{displayname}</a>
-                    <ul class = "ul2">
-                      <li class = "li2"><a href="/manage" id = "settingBtn"class = "black-text"><i id = "settingIcons"class = "material-icons left">settings</i>Setting</a></li>
+            <ul>
+                  <li className = "li2" ><a className = "black-text">{displayname}</a>
+                    <ul className = "ul2">
+                      <li className = "li2"><a href="/manage" id = "settingBtn" className = "black-text"><i id = "settingIcons" className = "material-icons left">settings</i>Setting</a></li>
                     </ul>
                   </li>
                   <li>
-                    <a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a>
+                    <a className = "black-text" onClick = {this.handler_signOut}>Sign Out</a>
                   </li>
-            </li>
+            </ul>
           )
         }
         else{
           return(
-            <li>
+            <ul>
                 {/* <li class = "li2"><a id = "cartApp" class = "collection-item" href = "/cart">cart<span class = "new badge">{this.state.size}</span></a></li> */}
-                <li class = "li2">
+                <li className = "li2">
                   <a href = "/cart">
                     <IconButton aria-label="cart">
                       <StyledBadge badgeContent={this.state.size} color="secondary">
@@ -126,9 +126,9 @@ class Admin_Component extends React.Component{
                     </IconButton>
                   </a>
                 </li>
-                <li class = "li2" ><a class = "black-text">{displayname}</a></li>
-                <li><a class = "black-text" onClick = {this.handler_signOut}>Sign Out</a></li>
-            </li>
+                <li className = "li2" ><a className = "black-text">{displayname}</a></li>
+                <li><a className = "black-text" onClick = {this.handler_signOut}>Sign Out</a></li>
+            </ul>
           )
         }
     }
