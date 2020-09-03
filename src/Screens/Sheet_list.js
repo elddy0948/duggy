@@ -37,8 +37,8 @@ class Sheet_list extends React.Component{
                 var url2 = "album-";
                 url2 += list[i];
 
-                sheetlist.push(<li class = "tab col s2"><a class = "black-text" href={url}>{list[i]}</a></li>);
-                xsheet_list.push(<div id = {url2} class = "col s12"><Album_XSheet url = {list[i]}/></div>)
+                sheetlist.push(<li className = "tab col s2"><a className = "black-text" href={url}>{list[i]}</a></li>);
+                xsheet_list.push(<div id = {url2} className = "col s12"><Album_XSheet url = {list[i]}/></div>)
                 }
 
                 this.setState({SheetList : sheetlist});
@@ -65,9 +65,9 @@ class Sheet_list extends React.Component{
 
     render(){
         return(
-            <div class = "row">
-                <div class = "col s12" id = "change_height">
-                    <ul id = "tabs-swipe-demo" class = "tabs">
+            <div className = "row">
+                <div className = "col s12" id = "change_height">
+                    <ul id = "tabs-swipe-demo" className = "tabs">
                         {this.state.SheetList}
                     </ul>
                     {this.state.XSheetList}

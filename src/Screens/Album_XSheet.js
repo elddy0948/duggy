@@ -63,7 +63,7 @@ class Album_XSheet extends React.Component{
               }
             })
             this.setState({buy_sheet : buysheet, buy_score : buyscore});
-            
+
           })
         }
         // get buyList End
@@ -75,9 +75,15 @@ class Album_XSheet extends React.Component{
           $(this).css({background:'#bdbdbd'});
         });
 
-        $("#songNameTitle .sheetul").hover(function(){{
-          $(this).find(".ul").stop().fadeToggle(300);
-        }});
+        $(document).ready(function(){
+          $("#songNameTitle .sheetul").hover(
+            function(){
+              $(this).find('.ul').show();
+            }, function(){
+              $(this).find('.ul').hide();
+            }
+          )
+        })
 
         // $(document).on("ready", ".tabs", function(){
         //   $('.tabs').tabs();
@@ -210,8 +216,8 @@ class Album_XSheet extends React.Component{
       render(){
           return(
               <div>
-                <div class = "album_col_div"/>
-                <div class = "album_grid" id = {this.state.sheet}>
+                <div className = "album_col_div"/>
+                <div className = "album_grid" id = {this.state.sheet}>
 
                   <div id = "album_primary">
                     
@@ -221,9 +227,9 @@ class Album_XSheet extends React.Component{
                         width="728" 
                         height="410"
                         src={this.state.songUrl}
-                        frameborder="0" 
+                        frameBorder="0" 
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
+                        allowFullScreen>
                         </iframe>
                       <div id = "album_primary_row_div"/>
                     </div>
@@ -235,8 +241,8 @@ class Album_XSheet extends React.Component{
                         <div id = "album_primary_songName">{this.state.songName}</div>
                         </div>
                         <div id = "album_primary_row2_title_bottom">
-                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_sheet}><i class = "material-icons left">shopping_cart</i>음원/700￦</button>
-                          <button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_score}><i class = "material-icons left">shopping_cart</i>악보/2000￦</button>
+                          <button id = "album_primary_row2_shopbtn" className = "waves-effect waves-light btn" onClick = {this.cart_sheet}><i className = "material-icons left">shopping_cart</i>음원/700￦</button>
+                          <button id = "album_primary_row2_shopbtn" className = "waves-effect waves-light btn" onClick = {this.cart_score}><i className = "material-icons left">shopping_cart</i>악보/2000￦</button>
                         </div>
                       </div>
                       <div id = "album_primary_row_div"/>
@@ -246,14 +252,14 @@ class Album_XSheet extends React.Component{
 
                   <div id = "album_secondary">
 
-                    <div id = "album_secondary_title_col">
+                  <div id = "album_secondary_title_col">
                       <div id = "songNameTitle">
-                        <h5>album_{this.state.sheet}</h5>
-                        <ul class = "sheetul"><div id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn"><i class = "material-icons left">shopping_cart</i>담기</div>
-                          <ul class = "ul">
-                            <li><button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_all_sheet}>음원 전체담기</button></li>
-                            <li><button id = "album_primary_row2_shopbtn" class = "waves-effect waves-light btn" onClick = {this.cart_all_score}>악보 전체담기</button></li>
-                          </ul>
+                        <h5>{this.state.sheet}</h5>
+                        <ul className = "sheetul"><div id = "album_primary_row2_shopbtn" className = "waves-effect waves-light btn"><i className = "material-icons left">shopping_cart</i>담기</div>
+                        <ul class = "ul">
+                          <li><button id = "album_primary_row2_shopbtn" className = "waves-effect waves-light btn" onClick = {this.cart_all_sheet}>음원 전체담기</button></li>
+                          <li><button id = "album_primary_row2_shopbtn" className = "waves-effect waves-light btn" onClick = {this.cart_all_score}>악보 전체담기</button></li>
+                        </ul>
                         </ul>
                       </div>
                       <div/>
@@ -262,9 +268,9 @@ class Album_XSheet extends React.Component{
                     <div id = "album_secondary_col">
                       
                       <div id = "album_songNameList_table">
-                        <table id = "album_songNameList">
+                        <table id = "album_songNameList"><tbody>
                           {this.state.songNameList}
-                        </table>
+                        </tbody></table>
                       </div>
                       <div/>
 
