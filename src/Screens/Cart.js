@@ -11,6 +11,8 @@ import { firestore, auth } from "../firebase";
 const Cart = () => {
   const [scores, setScores] = useState([]);
   const [sheets, setSheets] = useState([]);
+  const [scoreTotal, setScoreTotal] = useState(0);
+  const [sheetTotal, setSheetTotal] = useState(0);
 
   // useEffect 는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정 할 수 있는 Hook
   // 클래스형 컴포넌트의 componentDidMount 와 componentDidUpdate 를 합친 형태로 보아도 무방
@@ -31,6 +33,7 @@ const Cart = () => {
           }
         });
         setScores(items);
+        setScoreTotal(items.length * 2000);
       });
   };
 
@@ -48,6 +51,7 @@ const Cart = () => {
           }
         });
         setSheets(items);
+        setSheetTotal(items.length * 1000);
       });
   };
 
@@ -60,7 +64,7 @@ const Cart = () => {
   }, []);
 
   const removeScore = (item) => {
-    const items = scores.filter((score) => score != item);
+    const items = scores.filter((score) => score !== item);
 
     firestore
       .collection("Users")
@@ -79,7 +83,7 @@ const Cart = () => {
   };
 
   const removeSheet = (item) => {
-    const items = sheets.filter((sheet) => sheet != item);
+    const items = sheets.filter((sheet) => sheet !== item);
     firestore
       .collection("Users")
       .get()
@@ -94,6 +98,17 @@ const Cart = () => {
         });
       });
     return setSheets(items);
+  };
+
+  const requestKakaoPay = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        Authorization: "KakaoAK " + process.env.APP_ADMIN_KEY,
+      },
+      form: {},
+    };
   };
 
   return (
@@ -160,6 +175,10 @@ const Cart = () => {
               })}
             </tbody>
           </table>
+        </div>
+        <div className="center-align">
+          <h3>Total : {scoreTotal + sheetTotal}원</h3>
+          <button>결제하기</button>
         </div>
       </body>
     </>
