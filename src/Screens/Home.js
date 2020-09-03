@@ -21,11 +21,10 @@ function Home() {
   const images = [cover1, cover2, cover1];
 
   return (
-    <>
-      <body>
+      <div>
         <h3></h3>
-        <div class="row center-align">
-          <div class="col s6 right-align">
+        <div className="row center-align">
+          <div className="col s6 right-align">
             <a
               target="_blank"
               href="https://www.youtube.com/channel/UCvjoc8M_tZKmelczU4EtKAw"
@@ -33,7 +32,7 @@ function Home() {
               <img src={youtubeIcon} />
             </a>
           </div>
-          <div class="col s6 left-align">
+          <div className="col s6 left-align">
             <a target="_blank" href="https://www.instagram.com/hyun_duggy/">
               <img src={instagramIcon} />
             </a>
@@ -58,8 +57,7 @@ function Home() {
             </div>
           </Fade>
         </div>
-      </body>
-    </>
+      </div>
   );
 }
 
