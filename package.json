@@ -38,7 +38,6 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "styled-components": "^5.1.1",
-    "webpack": "^4.19.1",
     "yarn": "^1.22.5"
   },
   "scripts": {

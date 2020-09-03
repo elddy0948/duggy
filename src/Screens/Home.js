@@ -45,19 +45,16 @@ function Home() {
               <div className="image-container">
                 <img src={images[0]} />
               </div>
-              <h2>First Slide</h2>
             </div>
             <div className="each-fade">
               <div className="image-container">
                 <img src={images[1]} />
               </div>
-              <h2>Second Slide</h2>
             </div>
             <div className="each-fade">
               <div className="image-container">
                 <img src={images[2]} />
               </div>
-              <h2>Third Slide</h2>
             </div>
           </Fade>
         </div>

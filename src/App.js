@@ -1,11 +1,21 @@
 import React from "react";
 import duggyMusic from "./images/DuggyMusic.png";
-
+import albumsLogo from "./images/Albums.png";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import { Album, Login, Signup, Store, Home, 
-  Manage, Admin_Component, Password_reset, Sheet_list, Cart } from "./Screens";
+import {
+  Album,
+  Login,
+  Signup,
+  Store,
+  Home,
+  Manage,
+  Admin_Component,
+  Password_reset,
+  Sheet_list,
+  Cart,
+} from "./Screens";
 
 import "./sass/materialize.scss";
 import "materialize-css/dist/css/materialize.min.css";
@@ -61,7 +71,7 @@ class App extends React.Component {
 
     let sidenav = document.querySelector("#slide-out");
     M.Sidenav.init(sidenav, {});
-   
+
     // id => # class => .
 
     /* 건드리지마셈 여기
@@ -82,6 +92,9 @@ class App extends React.Component {
     //   $(this).addClass("active");
     //   $(this).css({background:'#bdbdbd'});
     // });
+    $(document).ready(function () {
+      $(".sidenav").sidenav();
+    });
   }
 
   /*
@@ -104,40 +117,43 @@ class App extends React.Component {
 
   render() {
     return (
-
       <Router>
         <a href="/">
-          <h2 id = "brandLogo" class = "center-align"><img src = {duggyMusic}/></h2>
+          <h2 id="brandLogo" class="center-align">
+            <img src={duggyMusic} />
+          </h2>
         </a>
-        
-        <nav class = "white">
-          <div>
-          <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li>
-              <Link to="/" class="black-text">
-                HOME
-              </Link>
-            </li>
-            <li id="li1">
-              <a class="black-text" href = "/album">ALBUM</a>
-            </li>
-            <li>
-              <Link to="/store" class="black-text">
-                STORE
-              </Link>
-            </li>
-          </ul>
-          
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            {
-              this.state.currentUser ?
-                <Admin_Component displayname = {this.state.currentUser.displayName} admintrue = {this.state.currentUser.email === this.state.administrator ? true : false}/>
-              :              
-              <li>
-               <li><Link to="/login" class="black-text">LOGIN</Link></li>
-               <li><Link to="/signup" class="black-text">SIGNUP</Link></li>
-              </li>
-            }
+
+        <nav class="white">
+          <div class="nav-wrapper">
+            <a class="black-text brand-logo center" href="/album">
+              <img src={albumsLogo} />
+            </a>
+
+            <ul id="nav-mobile" class="right">
+              {this.state.currentUser ? (
+                <Admin_Component
+                  displayname={this.state.currentUser.displayName}
+                  admintrue={
+                    this.state.currentUser.email === this.state.administrator
+                      ? true
+                      : false
+                  }
+                />
+              ) : (
+                <li>
+                  <li>
+                    <Link to="/login" class="black-text">
+                      LOGIN
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/signup" class="black-text">
+                      SIGNUP
+                    </Link>
+                  </li>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -145,26 +161,52 @@ class App extends React.Component {
         <Route exact path="/" component={Home} />
         <Route path="/album" component={Album} />
         <Route path="/store" component={Store} />
-        <Route path="/login" render={() => this.state.currentUser ? <Home /> : <Login />}/>
-        <Route path="/signup" render={() => this.state.currentUser ? <Home /> : <Signup />}/>
-        <Route path='/cart' render={() => this.state.currentUser ? <Cart /> : <Home /> } />
-        <Route path="/manage" 
-        render={() => this.state.currentUser ? 
-                      this.state.currentUser.email === this.state.administrator ? <Manage /> : <Home /> : <Home />}/>
-        <Route path = "/password_reset" render = {() => this.state.currentUser ? <Home /> : <Password_reset /> } />
-        
-        <div id = "duggy_music_bottom">
-          <div id = "bottom_row" />
-          <div id = "bottom_row_center">
-            <div id = "bottom_col"/>
-            <div id = "bottom_col">
-              <div id = "duggy_music_bottom_info">&#169; 2020 Duggy-Music, All rights reserved.</div>
-            </div>
-            <div id = "bottom_col"/>
-            </div>
-          <div id = "bottom_row" />
-        </div>
+        <Route
+          path="/login"
+          render={() => (this.state.currentUser ? <Home /> : <Login />)}
+        />
+        <Route
+          path="/signup"
+          render={() => (this.state.currentUser ? <Home /> : <Signup />)}
+        />
+        <Route
+          path="/cart"
+          render={() => (this.state.currentUser ? <Cart /> : <Home />)}
+        />
+        <Route
+          path="/manage"
+          render={() =>
+            this.state.currentUser ? (
+              this.state.currentUser.email === this.state.administrator ? (
+                <Manage />
+              ) : (
+                <Home />
+              )
+            ) : (
+              <Home />
+            )
+          }
+        />
+        <Route
+          path="/password_reset"
+          render={() =>
+            this.state.currentUser ? <Home /> : <Password_reset />
+          }
+        />
 
+        <div id="duggy_music_bottom">
+          <div id="bottom_row" />
+          <div id="bottom_row_center">
+            <div id="bottom_col" />
+            <div id="bottom_col">
+              <div id="duggy_music_bottom_info">
+                &#169; 2020 Duggy-Music, All rights reserved.
+              </div>
+            </div>
+            <div id="bottom_col" />
+          </div>
+          <div id="bottom_row" />
+        </div>
       </Router>
     );
   }
