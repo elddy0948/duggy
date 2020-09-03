@@ -146,7 +146,7 @@ class Login extends React.Component {
             firestore
               .collection("Users")
               .get()
-              .then((res) => {
+              .then(res => {
                 res.forEach((doc) => {
                   if (doc.get("Email") === auth.currentUser.email) {
                     login_check = true;
@@ -157,8 +157,11 @@ class Login extends React.Component {
                 if (login_check == false) {
                   var store_data = {
                     Email: auth.currentUser.email,
-                    authority: [],
-                    name: auth.currentUser.displayName,
+                    buy_score: [],
+                    buy_sheet: [],
+                    cart_score: [],
+                    cart_sheet: [],
+                    name: auth.currentUser.displayName
                   };
 
                   firestore
@@ -174,8 +177,12 @@ class Login extends React.Component {
                       return;
                     });
                 }
-              });
-              window.location.href = "/";
+              })
+              .catch(error => {
+                alert(error);
+                return;
+              })
+              // window.location.href = "/";
             // this.props.history.push("/");
           })
           .catch((error) => {

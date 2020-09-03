@@ -36,7 +36,7 @@ class Signup extends React.Component{
       alert('Cant signup this userName, please enter another userName.');
       window.location.reload();
     }
-    if (userEmail.length < 4) {
+    if (userEmail.length < 4 ) {
       alert('Please enter an email address.');
       window.location.reload();
     }
